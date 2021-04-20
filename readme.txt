@@ -1,5 +1,5 @@
 Intel Integrated Performance Primitives and Threading Building Block for Delphi 64bit compiler for speed up, parallelization and reliability
-On modern CPU generation, typical webbroker, soap, multithreaded server apps, massively using the heap, have a benefit over 1000%
+On modern CPU generation I9 I10, typical webbroker, soap, multithreaded server apps, massively using the heap, can have a benefit over 1000%
 Freely available and redistributable for free
 Please contact me at my email roberto dot dellapasqua at live dot com
 Thank you and best regards
