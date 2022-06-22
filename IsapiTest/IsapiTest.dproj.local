@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2020/03/02 18:21:35.000.221,=C:\Users\Administrator\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2020/03/06 15:22:30.000.638,=C:\Users\Administrator\Documents\Embarcadero\Studio\Projects\FormUnit2.pas</Transaction>
+    <Transaction>2020/03/06 15:22:30.000.794,=C:\Users\Administrator\Documents\Embarcadero\Studio\Projects\WebModuleUnit3.pas</Transaction>
+    <Transaction>2020/03/09 21:51:40.000.937,=C:\Users\Administrator\Documents\Embarcadero\Studio\Projects\WebModuleUnit3.pas</Transaction>
+    <Transaction>2020/03/09 21:52:12.000.443,C:\Users\Administrator\Documents\Embarcadero\Studio\Projects\WebModuleUnit3.pas=C:\Libs\IntelMM\IsapiTest\WebModuleUnit.pas</Transaction>
+    <Transaction>2020/03/09 21:52:12.000.443,C:\Users\Administrator\Documents\Embarcadero\Studio\Projects\WebModuleUnit3.dfm=C:\Libs\IntelMM\IsapiTest\WebModuleUnit.dfm</Transaction>
+    <Transaction>2020/03/09 21:52:16.000.378,C:\Users\Administrator\Documents\Embarcadero\Studio\Projects\Project3.dproj=C:\Libs\IntelMM\IsapiTest\IsapiTest.dproj</Transaction>
+  </Transactions>
+</BorlandProject>
