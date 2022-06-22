@@ -38,4 +38,5 @@ btw. rem // RedirectCode(@System.Move, @Move2); in RDPSimd64 if you have single 
 The library is well tested, but if you found any trouble please notify me.
 
 Thank you and best regards
+
 Roberto Della Pasqua
