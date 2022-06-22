@@ -39,35 +39,3 @@ The library is well tested, but if you found any trouble please notify me.
 
 Thank you and best regards
 Roberto Della Pasqua
-
-"
-DLL? Are from Intel libs, I did only pascal wrappers;
-are plain, optimized config, compiled dll from Intel TBB and IPP royalty free packages, no custom source code changes are done;
-you can compile by yourself, I have done them in the repository because many people cannot build them, or not having the time to do
-
-for the memory allocator:
-https://github.com/oneapi-src/oneTBB/releases
-https://github.com/oneapi-src/oneTBB/archive/v2020.3.zip
--> see folder TBBMalloc
-
-for the rtl simd patches:
-https://software.seek.intel.com/performance-libraries
--> see IPP
-run the utility to build a custom DLL and export:
-'ippsZero_8u';
-'ippsCopy_8u';
-'ippsMove_8u';
-'ippsSet_8u';
-'ippsFind_8u';
-'ippsCompare_8u';
-'ippsUppercaseLatin_8u_I';
-'ippsReplaceC_8u';
- 
-for the ZLIB acceleration (3x-5x quicker than windows gzip, webbroker helper provided)
--> extract IPP under Linux, see the readme how to patch zlib original sources, take the changed sources and compile them with MS VC++
-
-kind regards
-R.
-"
-
- 
