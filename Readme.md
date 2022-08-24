@@ -18,8 +18,6 @@ This folder contains:
 - SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)
 - License.txt for legal terms
 
-The final user deployment is donateware. Please contact me roberto.dellapasqua@live.com or www.dellapasqua.com
-
 A test with Indy, the built-in TCP Delphi library, on I7 cpu, shows an enhancement from 6934.29 ops/sec to 23097.68 ops/sec
 
 Another test with WebBroker http compression, on I7 cpu, shows an enhancement from 147 pages/sec to 722 pages/sec
@@ -40,6 +38,7 @@ If you want enable accelerated zlib programmatically into your WebBroker app, ju
 btw. rem // RedirectCode(@System.Move, @Move2); in RDPSimd64 if you have single threaded app with smallest ram allocations
 
 The library is well tested, but if you found any trouble please notify me.
+Contact me roberto.dellapasqua@live.com or www.dellapasqua.com
 
 The library is linked to visual c++ ucrt, so you need to install visual c++ latest redistributable
 
