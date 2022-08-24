@@ -1,4 +1,8 @@
-﻿Copyright (c) 2019 Roberto Della Pasqua
+Please check the products license, now (August 2022) completely free to deploy and distribute
+https://www.intel.com/content/www/us/en/developer/tools/oneapi/ipp.html
+https://www.intel.com/content/www/us/en/developer/tools/oneapi/onetbb.html
+
+Copyright (c) 2019 Roberto Della Pasqua
 
 Use and Redistribution.  You may use and redistribute the software (the “Software”) libraries (DLL), without modification, provided the following conditions are met:
 
@@ -6,7 +10,7 @@ Use and Redistribution.  You may use and redistribute the software (the “Softw
 
 * No reverse engineering, decompilation, or disassembly of this Software is permitted.
 
-* Free to download and testing for anyone, donateware for every application install (contact me roberto.dellapasqua@live.com or www.dellapasqua.com).
+* Freely donateware (contact me roberto.dellapasqua@live.com or www.dellapasqua.com).
 
 DISCLAIMER.  THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT ARE DISCLAIMED. THIS SOFTWARE IS NOT INTENDED FOR USE IN SYSTEMS OR APPLICATIONS WHERE FAILURE OF THE SOFTWARE MAY CAUSE PERSONAL INJURY OR DEATH AND YOU AGREE THAT YOU ARE FULLY RESPONSIBLE FOR ANY CLAIMS, COSTS, DAMAGES, EXPENSES, AND ATTORNEYS’ FEES ARISING OUT OF ANY SUCH USE, EVEN IF ANY CLAIM ALLEGES THAT ROBERTO DELLA PASQUA WAS NEGLIGENT REGARDING THE DESIGN OR MANUFACTURE OF THE MATERIALS.
 
