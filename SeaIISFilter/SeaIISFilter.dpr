@@ -8,495 +8,498 @@ library SeaIISFilter;
 // data structure deduplication
 // 5x faster than default IIS 10 gzip at the same ratio (I7 cpu 4/8 core)
 
-{.$DEFINE DEBUGFILE }
+{ .$DEFINE DEBUGFILE }
 {$O+}
 {$WEAKLINKRTTI ON}
 {$MINENUMSIZE 4}
 
 uses
-  RDPMM64,
-  RDPSimd64,
-  RDPZLib64,
+  Rdpmm64,
+  Rdpsimd64,
+  Rdpzlib64,
   Windows,
-  SysUtils;
+  Sysutils;
 
 // SDK IIS 7.0 httpfilt.h
 
 const
-  HSE_VERSION_MAJOR = 7;
-  HSE_VERSION_MINOR = 0;
-  HSE_LOG_BUFFER_LEN = 80;
-  HSE_MAX_EXT_DLL_NAME_LEN = 256;
-  HTTP_FILTER_REVISION = $70000;
-  SF_MAX_USERNAME = (256 + 1);
-  SF_MAX_PASSWORD = (256 + 1);
-  SF_MAX_AUTH_TYPE = (32 + 1);
-  SF_MAX_FILTER_DESC_LEN = (256 + 1);
-  SF_STATUS_REQ_FINISHED = $8000000;
-  SF_STATUS_REQ_FINISHED_KEEP_CONN = $8000001;
-  SF_STATUS_REQ_NEXT_NOTIFICATION = $8000002;
-  SF_STATUS_REQ_HANDLED_NOTIFICATION = $8000003;
-  SF_STATUS_REQ_ERROR = $8000004;
-  SF_STATUS_REQ_READ_NEXT = $8000005;
-  SF_DENIED_LOGON = $00000001;
-  SF_DENIED_RESOURCE = $00000002;
-  SF_DENIED_FILTER = $00000004;
-  SF_DENIED_APPLICATION = $00000008;
-  SF_DENIED_BY_CONFIG = $00010000;
-  SF_NOTIFY_SECURE_PORT = $00000001;
-  SF_NOTIFY_NONSECURE_PORT = $00000002;
-  SF_NOTIFY_READ_RAW_DATA = $00008000;
-  SF_NOTIFY_PREPROC_HEADERS = $00004000;
-  SF_NOTIFY_URL_MAP = $00001000;
-  SF_NOTIFY_AUTHENTICATION = $00002000;
-  SF_NOTIFY_ACCESS_DENIED = $00000800;
-  SF_NOTIFY_AUTH_COMPLETE = $04000000;
-  SF_NOTIFY_SEND_RESPONSE = $00000040;
-  SF_NOTIFY_SEND_RAW_DATA = $00000400;
-  SF_NOTIFY_END_OF_REQUEST = $00000080;
-  SF_NOTIFY_LOG = $00000200;
-  SF_NOTIFY_END_OF_NET_SESSION = $00000100;
-  SF_NOTIFY_EXTENSION_TRIGGER = $02000000;
-  SF_NOTIFY_ORDER_HIGH = $00080000;
-  SF_NOTIFY_ORDER_MEDIUM = $00040000;
-  SF_NOTIFY_ORDER_LOW = $00020000;
-  SF_NOTIFY_ORDER_DEFAULT = SF_NOTIFY_ORDER_LOW;
-  SF_NOTIFY_ORDER_MASK = (SF_NOTIFY_ORDER_HIGH or SF_NOTIFY_ORDER_MEDIUM or SF_NOTIFY_ORDER_LOW);
+  Hse_version_major = 7;
+  Hse_version_minor = 0;
+  Hse_log_buffer_len = 80;
+  Hse_max_ext_dll_name_len = 256;
+  Http_filter_revision = $70000;
+  Sf_max_username = (256 + 1);
+  Sf_max_password = (256 + 1);
+  Sf_max_auth_type = (32 + 1);
+  Sf_max_filter_desc_len = (256 + 1);
+  Sf_status_req_finished = $8000000;
+  Sf_status_req_finished_keep_conn = $8000001;
+  Sf_status_req_next_notification = $8000002;
+  Sf_status_req_handled_notification = $8000003;
+  Sf_status_req_error = $8000004;
+  Sf_status_req_read_next = $8000005;
+  Sf_denied_logon = $00000001;
+  Sf_denied_resource = $00000002;
+  Sf_denied_filter = $00000004;
+  Sf_denied_application = $00000008;
+  Sf_denied_by_config = $00010000;
+  Sf_notify_secure_port = $00000001;
+  Sf_notify_nonsecure_port = $00000002;
+  Sf_notify_read_raw_data = $00008000;
+  Sf_notify_preproc_headers = $00004000;
+  Sf_notify_url_map = $00001000;
+  Sf_notify_authentication = $00002000;
+  Sf_notify_access_denied = $00000800;
+  Sf_notify_auth_complete = $04000000;
+  Sf_notify_send_response = $00000040;
+  Sf_notify_send_raw_data = $00000400;
+  Sf_notify_end_of_request = $00000080;
+  Sf_notify_log = $00000200;
+  Sf_notify_end_of_net_session = $00000100;
+  Sf_notify_extension_trigger = $02000000;
+  Sf_notify_order_high = $00080000;
+  Sf_notify_order_medium = $00040000;
+  Sf_notify_order_low = $00020000;
+  Sf_notify_order_default = Sf_notify_order_low;
+  Sf_notify_order_mask = (Sf_notify_order_high or Sf_notify_order_medium or Sf_notify_order_low);
 
 type
-  SF_REQ_TYPE = (SF_REQ_SEND_RESPONSE_HEADER, SF_REQ_ADD_HEADERS_ON_DENIAL, SF_REQ_SET_NEXT_READ_SIZE, SF_REQ_SET_PROXY_INFO, SF_REQ_GET_CONNID,
-    SF_REQ_SET_CERTIFICATE_INFO, SF_REQ_GET_PROPERTY, SF_REQ_NORMALIZE_URL, SF_REQ_DISABLE_NOTIFICATIONS);
+  Sf_req_type = (Sf_req_send_response_header, Sf_req_add_headers_on_denial, Sf_req_set_next_read_size, Sf_req_set_proxy_info,
+    Sf_req_get_connid, Sf_req_set_certificate_info, Sf_req_get_property, Sf_req_normalize_url, Sf_req_disable_notifications);
 
-  SF_PROPERTY_IIS = (SF_PROPERTY_SSL_CTXT, SF_PROPERTY_INSTANCE_NUM_ID);
-  SF_PRIORITY_TYPE = (HIGH_PRIORITY, MEDIUM_PRIORITY, LOW_PRIORITY, DEFAULT_PRIORITY);
+  Sf_property_iis = (Sf_property_ssl_ctxt, Sf_property_instance_num_id);
+  Sf_priority_type = (High_priority, Medium_priority, Low_priority, Default_priority);
 
-  THTTP_FILTER_CONTEXT = record
-    cbSize: DWORD;
-    Revision: DWORD;
-    ServerContext: PVOID;
-    ulReserved: DWORD;
-    fIsSecurePort: BOOL;
-    pFilterContext: PVOID;
-    GetServerVariable: PVOID;
-    AddResponseHeaders: PVOID;
-    WriteClient: PVOID;
-    AllocMem: PVOID;
-    ServerSupportFunc: PVOID;
+  Thttp_filter_context = record
+    Cbsize: Dword;
+    Revision: Dword;
+    Servercontext: Pvoid;
+    Ulreserved: Dword;
+    Fissecureport: Bool;
+    Pfiltercontext: Pvoid;
+    Getservervariable: Pvoid;
+    Addresponseheaders: Pvoid;
+    Writeclient: Pvoid;
+    Allocmem: Pvoid;
+    Serversupportfunc: Pvoid;
   end;
 
-  HTTP_FILTER_CONTEXT = THTTP_FILTER_CONTEXT;
-  PHTTP_FILTER_CONTEXT = ^HTTP_FILTER_CONTEXT;
+  Http_filter_context = Thttp_filter_context;
+  Phttp_filter_context = ^Http_filter_context;
 
-  TGetServerVariable = function(pfc: PHTTP_FILTER_CONTEXT; VariableName: PAnsiChar; Buffer: LPVOID; BuffSize: PDWORD): BOOL; stdcall;
-  TAddResponseHeaders = function(pfc: PHTTP_FILTER_CONTEXT; Headers: PAnsiChar; Reserved: DWORD): BOOL; stdcall;
-  TWriteClient = function(pfc: PHTTP_FILTER_CONTEXT; Buffer: LPVOID; dwBytes: LPDWORD; Reserved: DWORD): BOOL; stdcall;
-  TAllocMem = function(pfc: PHTTP_FILTER_CONTEXT; cbSize: DWORD; dwReserved: DWORD): LPVOID; stdcall;
-  TServerSupportFunc = function(pfc: PHTTP_FILTER_CONTEXT; sfReq: SF_REQ_TYPE; pData: PVOID; ul1: DWORD; ul2: DWORD): BOOL; stdcall;
+  Tgetservervariable = function(Pfc: Phttp_filter_context; Variablename: Pansichar; Buffer: Lpvoid; Buffsize: Pdword)
+    : Bool; stdcall;
+  Taddresponseheaders = function(Pfc: Phttp_filter_context; Headers: Pansichar; Reserved: Dword): Bool; stdcall;
+  Twriteclient = function(Pfc: Phttp_filter_context; Buffer: Lpvoid; Dwbytes: Lpdword; Reserved: Dword): Bool; stdcall;
+  Tallocmem = function(Pfc: Phttp_filter_context; Cbsize: Dword; Dwreserved: Dword): Lpvoid; stdcall;
+  Tserversupportfunc = function(Pfc: Phttp_filter_context; Sfreq: Sf_req_type; Pdata: Pvoid; Ul1: Dword; Ul2: Dword)
+    : Bool; stdcall;
 
-  THTTP_FILTER_RAW_DATA = record
-    pvInData: PVOID;
-    cbInData: DWORD;
-    cbInBuffer: DWORD;
-    dwReserved: DWORD;
+  Thttp_filter_raw_data = record
+    Pvindata: Pvoid;
+    Cbindata: Dword;
+    Cbinbuffer: Dword;
+    Dwreserved: Dword;
   end;
 
-  HTTP_FILTER_RAW_DATA = THTTP_FILTER_RAW_DATA;
-  PHTTP_FILTER_RAW_DATA = ^HTTP_FILTER_RAW_DATA;
+  Http_filter_raw_data = Thttp_filter_raw_data;
+  Phttp_filter_raw_data = ^Http_filter_raw_data;
 
-  TGetHeader = function(pfc: PHTTP_FILTER_CONTEXT; lpszName: PAnsiChar; lpvBuffer: LPVOID; lpdwSize: LPDWORD): BOOL; stdcall;
-  TSetHeader = function(pfc: PHTTP_FILTER_CONTEXT; lpszName: PAnsiChar; lpszValue: PAnsiChar): BOOL; stdcall;
-  TAddHeader = function(pfc: PHTTP_FILTER_CONTEXT; lpszName: PAnsiChar; lpszValue: PAnsiChar): BOOL; stdcall;
-  TGetUserToken = function(pfc: PHTTP_FILTER_CONTEXT; phToken: PHANDLE): BOOL; stdcall;
+  Tgetheader = function(Pfc: Phttp_filter_context; Lpszname: Pansichar; Lpvbuffer: Lpvoid; Lpdwsize: Lpdword): Bool; stdcall;
+  Tsetheader = function(Pfc: Phttp_filter_context; Lpszname: Pansichar; Lpszvalue: Pansichar): Bool; stdcall;
+  Taddheader = function(Pfc: Phttp_filter_context; Lpszname: Pansichar; Lpszvalue: Pansichar): Bool; stdcall;
+  Tgetusertoken = function(Pfc: Phttp_filter_context; Phtoken: Phandle): Bool; stdcall;
 
-  THTTP_FILTER_PREPROC_HEADERS = record
-    GetHeader: PVOID;
-    SetHeader: PVOID;
-    AddHeader: PVOID;
-    dwReserved: DWORD;
+  Thttp_filter_preproc_headers = record
+    Getheader: Pvoid;
+    Setheader: Pvoid;
+    Addheader: Pvoid;
+    Dwreserved: Dword;
   end;
 
-  HTTP_FILTER_PREPROC_HEADERS = THTTP_FILTER_PREPROC_HEADERS;
-  PHTTP_FILTER_PREPROC_HEADERS = ^HTTP_FILTER_PREPROC_HEADERS;
-  HTTP_FILTER_SEND_RESPONSE = HTTP_FILTER_PREPROC_HEADERS;
-  THTTP_FILTER_SEND_RESPONSE = THTTP_FILTER_PREPROC_HEADERS;
-  PHTTP_FILTER_SEND_RESPONSE = ^HTTP_FILTER_SEND_RESPONSE;
+  Http_filter_preproc_headers = Thttp_filter_preproc_headers;
+  Phttp_filter_preproc_headers = ^Http_filter_preproc_headers;
+  Http_filter_send_response = Http_filter_preproc_headers;
+  Thttp_filter_send_response = Thttp_filter_preproc_headers;
+  Phttp_filter_send_response = ^Http_filter_send_response;
 
-  THTTP_FILTER_AUTHENT = record
-    pszUser: PAnsiChar;
-    cbUserBuff: DWORD;
-    pszPassword: PAnsiChar;
-    cbPasswordBuff: DWORD;
+  Thttp_filter_authent = record
+    Pszuser: Pansichar;
+    Cbuserbuff: Dword;
+    Pszpassword: Pansichar;
+    Cbpasswordbuff: Dword;
   end;
 
-  HTTP_FILTER_AUTHENT = THTTP_FILTER_AUTHENT;
-  PHTTP_FILTER_AUTHENT = ^HTTP_FILTER_AUTHENT;
+  Http_filter_authent = Thttp_filter_authent;
+  Phttp_filter_authent = ^Http_filter_authent;
 
-  THTTP_FILTER_URL_MAP = record
-    pszURL: PAnsiChar;
-    pszPhysicalPath: PAnsiChar;
-    cbPathBuff: DWORD;
+  Thttp_filter_url_map = record
+    Pszurl: Pansichar;
+    Pszphysicalpath: Pansichar;
+    Cbpathbuff: Dword;
   end;
 
-  HTTP_FILTER_URL_MAP = THTTP_FILTER_URL_MAP;
-  PHTTP_FILTER_URL_MAP = ^HTTP_FILTER_URL_MAP;
+  Http_filter_url_map = Thttp_filter_url_map;
+  Phttp_filter_url_map = ^Http_filter_url_map;
 
-  THTTP_FILTER_URL_MAP_EX = record
-    pszURL: PAnsiChar;
-    pszPhysicalPath: PAnsiChar;
-    cbPathBuff: DWORD;
-    DwFlags: DWORD;
-    CchMatchingPath: DWORD;
-    CchMatchingURL: DWORD;
-    PszScriptMapEntry: PAnsiChar;
+  Thttp_filter_url_map_ex = record
+    Pszurl: Pansichar;
+    Pszphysicalpath: Pansichar;
+    Cbpathbuff: Dword;
+    Dwflags: Dword;
+    Cchmatchingpath: Dword;
+    Cchmatchingurl: Dword;
+    Pszscriptmapentry: Pansichar;
   end;
 
-  HTTP_FILTER_URL_MAP_EX = THTTP_FILTER_URL_MAP_EX;
-  PHTTP_FILTER_URL_MAP_EX = ^HTTP_FILTER_URL_MAP_EX;
+  Http_filter_url_map_ex = Thttp_filter_url_map_ex;
+  Phttp_filter_url_map_ex = ^Http_filter_url_map_ex;
 
-  THTTP_FILTER_ACCESS_DENIED = record
-    pszURL: PAnsiChar;
-    pszPhysicalPath: PAnsiChar;
-    dwReason: DWORD;
+  Thttp_filter_access_denied = record
+    Pszurl: Pansichar;
+    Pszphysicalpath: Pansichar;
+    Dwreason: Dword;
   end;
 
-  HTTP_FILTER_ACCESS_DENIED = THTTP_FILTER_ACCESS_DENIED;
-  PHTTP_FILTER_ACCESS_DENIED = ^HTTP_FILTER_ACCESS_DENIED;
+  Http_filter_access_denied = Thttp_filter_access_denied;
+  Phttp_filter_access_denied = ^Http_filter_access_denied;
 
-  THTTP_FILTER_LOG = record
-    pszClientHostName: PAnsiChar;
-    pszClientUserName: PAnsiChar;
-    pszServerName: PAnsiChar;
-    pszOperation: PAnsiChar;
-    pszTarget: PAnsiChar;
-    pszParameters: PAnsiChar;
-    dwHttpStatus: DWORD;
-    dwWin32Status: DWORD;
-    DwBytesSent: DWORD;
-    DwBytesRecvd: DWORD;
-    MsTimeForProcessing: DWORD;
+  Thttp_filter_log = record
+    Pszclienthostname: Pansichar;
+    Pszclientusername: Pansichar;
+    Pszservername: Pansichar;
+    Pszoperation: Pansichar;
+    Psztarget: Pansichar;
+    Pszparameters: Pansichar;
+    Dwhttpstatus: Dword;
+    Dwwin32status: Dword;
+    Dwbytessent: Dword;
+    Dwbytesrecvd: Dword;
+    Mstimeforprocessing: Dword;
   end;
 
-  HTTP_FILTER_LOG = THTTP_FILTER_LOG;
-  PHTTP_FILTER_LOG = ^HTTP_FILTER_LOG;
+  Http_filter_log = Thttp_filter_log;
+  Phttp_filter_log = ^Http_filter_log;
 
-  THTTP_FILTER_AUTH_COMPLETE_INFO = record
-    GetHeader: PVOID;
-    SetHeader: PVOID;
-    AddHeader: PVOID;
-    GetUserToken: TGetUserToken;
-    HttpStatus: DWORD;
-    fResetAuth: BOOL;
-    dwReserved: DWORD;
+  Thttp_filter_auth_complete_info = record
+    Getheader: Pvoid;
+    Setheader: Pvoid;
+    Addheader: Pvoid;
+    Getusertoken: Tgetusertoken;
+    Httpstatus: Dword;
+    Fresetauth: Bool;
+    Dwreserved: Dword;
   end;
 
-  HTTP_FILTER_AUTH_COMPLETE_INFO = THTTP_FILTER_AUTH_COMPLETE_INFO;
-  PHTTP_FILTER_AUTH_COMPLETE_INFO = ^HTTP_FILTER_AUTH_COMPLETE_INFO;
+  Http_filter_auth_complete_info = Thttp_filter_auth_complete_info;
+  Phttp_filter_auth_complete_info = ^Http_filter_auth_complete_info;
 
-  THTTP_FILTER_EXTENSION_TRIGGER_INFO = record
-    dwTriggerType: DWORD;
-    pvTriggerContext: PVOID;
+  Thttp_filter_extension_trigger_info = record
+    Dwtriggertype: Dword;
+    Pvtriggercontext: Pvoid;
   end;
 
-  HTTP_FILTER_EXTENSION_TRIGGER_INFO = THTTP_FILTER_EXTENSION_TRIGGER_INFO;
-  PHTTP_FILTER_EXTENSION_TRIGGER_INFO = ^HTTP_FILTER_EXTENSION_TRIGGER_INFO;
+  Http_filter_extension_trigger_info = Thttp_filter_extension_trigger_info;
+  Phttp_filter_extension_trigger_info = ^Http_filter_extension_trigger_info;
 
-  THTTP_FILTER_VERSION = record
-    dwServerFilterVersion: DWORD;
-    dwFilterVersion: DWORD;
-    lpszFilterDesc: array [0 .. SF_MAX_FILTER_DESC_LEN - 1] of AnsiChar;
-    DwFlags: DWORD;
+  Thttp_filter_version = record
+    Dwserverfilterversion: Dword;
+    Dwfilterversion: Dword;
+    Lpszfilterdesc: array [0 .. Sf_max_filter_desc_len - 1] of Ansichar;
+    Dwflags: Dword;
   end;
 
-  HTTP_FILTER_VERSION = THTTP_FILTER_VERSION;
-  PHTTP_FILTER_VERSION = ^HTTP_FILTER_VERSION;
+  Http_filter_version = Thttp_filter_version;
+  Phttp_filter_version = ^Http_filter_version;
 
-  TThStruct = class
+  Tthstruct = class
   strict private
-    CPowered: TBytes;
-    CAsp: TBytes;
-    CAspOld: TBytes;
-    CPhp: TBytes;
-    CJava: TBytes;
-    CAspx: TBytes;
-    CDll: TBytes;
-    CHttp1: TBytes;
-    CHttp2: TBytes;
-    CCrlf: TBytes;
+    Cpowered: Tbytes;
+    Casp: Tbytes;
+    Caspold: Tbytes;
+    Cphp: Tbytes;
+    Cjava: Tbytes;
+    Caspx: Tbytes;
+    Cdll: Tbytes;
+    Chttp1: Tbytes;
+    Chttp2: Tbytes;
+    Ccrlf: Tbytes;
     //
-    CCtext: TBytes;
-    CCtext2: TBytes;
-    CCtext3: TBytes;
-    CCtext4: TBytes;
-    CCtext5: TBytes;
+    Cctext: Tbytes;
+    Cctext2: Tbytes;
+    Cctext3: Tbytes;
+    Cctext4: Tbytes;
+    Cctext5: Tbytes;
     //
-    CAcceptText: TBytes;
+    Caccepttext: Tbytes;
     //
-    CCl: TBytes;
-    CTransfer: TBytes;
-    CContent: TBytes;
-    CLength: TBytes;
-    CAccept: TBytes;
-    CDeflate: TBytes;
-    CGzip: TBytes;
-    CXGzip: TBytes;
-    CEndLine: TBytes;
-    CReplace: TBytes;
-    CCTDeflate: TBytes;
+    Ccl: Tbytes;
+    Ctransfer: Tbytes;
+    Ccontent: Tbytes;
+    Clength: Tbytes;
+    Caccept: Tbytes;
+    Cdeflate: Tbytes;
+    Cgzip: Tbytes;
+    Cxgzip: Tbytes;
+    Cendline: Tbytes;
+    Creplace: Tbytes;
+    Cctdeflate: Tbytes;
     //
-    FThreadId: DWORD;
-    FZLevel: Integer;
+    Fthreadid: Dword;
+    Fzlevel: Integer;
     //
-    PHeaders: PVOID;
-    PHeadersLen: Integer;
-    GpvInData: PVOID;
-    GcbInData: Cardinal;
-    GBuffer: PVOID;
-    GBufSize: Cardinal;
-    IBuffer: PVOID;
-    IBufSize: Integer;
-    IBufferTS: PVOID;
+    Pheaders: Pvoid;
+    Pheaderslen: Integer;
+    Gpvindata: Pvoid;
+    Gcbindata: Cardinal;
+    Gbuffer: Pvoid;
+    Gbufsize: Cardinal;
+    Ibuffer: Pvoid;
+    Ibufsize: Integer;
+    Ibufferts: Pvoid;
     //
-    CLen: Integer;
-    CLen2: Integer;
-    CLen3: Integer;
-    Headers: PVOID;
-    HelperS: PAnsiChar;
-    HelperP: PByte;
+    Clen: Integer;
+    Clen2: Integer;
+    Clen3: Integer;
+    Headers: Pvoid;
+    Helpers: Pansichar;
+    Helperp: Pbyte;
     //
-    QStartTime: Int64;
-    QEndTime: Int64;
-    QFrequency: Int64;
-    QElapsedTime: Int64;
-    QTotalHits: Int64;
-    QTotalBytes: Int64;
-    QTotalBytesC: Int64;
+    Qstarttime: Int64;
+    Qendtime: Int64;
+    Qfrequency: Int64;
+    Qelapsedtime: Int64;
+    Qtotalhits: Int64;
+    Qtotalbytes: Int64;
+    Qtotalbytesc: Int64;
 {$IFDEF DEBUGFILE}
-    DebugS: AnsiString;
+    Debugs: Ansistring;
 {$ENDIF}
   protected
     constructor Create;
     destructor Destroy; override;
   public
-    procedure TreatUrlMap(pfc: PHTTP_FILTER_CONTEXT; PvNotification: PVOID);
-    procedure TreatSendResponse(pfc: PHTTP_FILTER_CONTEXT; PvNotification: PVOID);
-    procedure TreatSendRawData(pfc: PHTTP_FILTER_CONTEXT; PvNotification: PVOID);
-    procedure TreatEndOfRequest(pfc: PHTTP_FILTER_CONTEXT);
+    procedure Treaturlmap(Pfc: Phttp_filter_context; Pvnotification: Pvoid);
+    procedure Treatsendresponse(Pfc: Phttp_filter_context; Pvnotification: Pvoid);
+    procedure Treatsendrawdata(Pfc: Phttp_filter_context; Pvnotification: Pvoid);
+    procedure Treatendofrequest(Pfc: Phttp_filter_context);
   end;
 
-threadvar ThInit: boolean;
-threadvar ThWork: TThStruct;
+threadvar Thinit: Boolean;
+threadvar Thwork: Tthstruct;
 
-constructor TThStruct.Create;
+constructor Tthstruct.Create;
 begin
-  CPowered := TEncoding.ASCII.GetBytes('X-Powered-By:');
-  CAsp := TEncoding.ASCII.GetBytes('asp.net');
-  CAspOld := TEncoding.ASCII.GetBytes('asp');
-  CPhp := TEncoding.ASCII.GetBytes('php');
-  CJava := TEncoding.ASCII.GetBytes('jsp');
-  CAspx := TEncoding.ASCII.GetBytes('aspx');
-  CDll := TEncoding.ASCII.GetBytes('dll');
-  CHttp1 := TEncoding.ASCII.GetBytes('HTTP/1.1 200 OK');
-  CHttp2 := TEncoding.ASCII.GetBytes('HTTP/2');
-  CCrlf := TEncoding.ASCII.GetBytes(#13#10#13#10);
+  Cpowered := Tencoding.Ascii.Getbytes('X-Powered-By:');
+  Casp := Tencoding.Ascii.Getbytes('asp.net');
+  Caspold := Tencoding.Ascii.Getbytes('asp');
+  Cphp := Tencoding.Ascii.Getbytes('php');
+  Cjava := Tencoding.Ascii.Getbytes('jsp');
+  Caspx := Tencoding.Ascii.Getbytes('aspx');
+  Cdll := Tencoding.Ascii.Getbytes('dll');
+  Chttp1 := Tencoding.Ascii.Getbytes('HTTP/1.1 200 OK');
+  Chttp2 := Tencoding.Ascii.Getbytes('HTTP/2');
+  Ccrlf := Tencoding.Ascii.Getbytes(#13#10#13#10);
   //
-  CCtext := TEncoding.ASCII.GetBytes('Content-Type: text/');
-  CCtext2 := TEncoding.ASCII.GetBytes('Content-Type: message/');
-  CCtext3 := TEncoding.ASCII.GetBytes('Content-Type: application/javascript');
-  CCtext4 := TEncoding.ASCII.GetBytes('Content-Type: application/x-javascript');
-  CCtext5 := TEncoding.ASCII.GetBytes('Content-Type: application/xml');
+  Cctext := Tencoding.Ascii.Getbytes('Content-Type: text/');
+  Cctext2 := Tencoding.Ascii.Getbytes('Content-Type: message/');
+  Cctext3 := Tencoding.Ascii.Getbytes('Content-Type: application/javascript');
+  Cctext4 := Tencoding.Ascii.Getbytes('Content-Type: application/x-javascript');
+  Cctext5 := Tencoding.Ascii.Getbytes('Content-Type: application/xml');
   //
-  CAcceptText := TEncoding.ASCII.GetBytes('Accept: text/html');
+  Caccepttext := Tencoding.Ascii.Getbytes('Accept: text/html');
   //
-  CCl := TEncoding.ASCII.GetBytes('<%CL%>');
-  CTransfer := TEncoding.ASCII.GetBytes('Transfer-Encoding:');
-  CContent := TEncoding.ASCII.GetBytes('Content-Encoding:');
-  CLength := TEncoding.ASCII.GetBytes('Content-Length:');
-  CAccept := TEncoding.ASCII.GetBytes('HTTP_ACCEPT_ENCODING');
-  CDeflate := TEncoding.ASCII.GetBytes('deflate');
-  CGzip := TEncoding.ASCII.GetBytes('gzip');
-  CXGzip := TEncoding.ASCII.GetBytes('x-gzip');
-  CEndLine := TEncoding.ASCII.GetBytes(#13#10);
-  CReplace := TEncoding.ASCII.GetBytes('%PAR%');
-  CCTDeflate := TEncoding.ASCII.GetBytes('Content-Encoding: deflate');
+  Ccl := Tencoding.Ascii.Getbytes('<%CL%>');
+  Ctransfer := Tencoding.Ascii.Getbytes('Transfer-Encoding:');
+  Ccontent := Tencoding.Ascii.Getbytes('Content-Encoding:');
+  Clength := Tencoding.Ascii.Getbytes('Content-Length:');
+  Caccept := Tencoding.Ascii.Getbytes('HTTP_ACCEPT_ENCODING');
+  Cdeflate := Tencoding.Ascii.Getbytes('deflate');
+  Cgzip := Tencoding.Ascii.Getbytes('gzip');
+  Cxgzip := Tencoding.Ascii.Getbytes('x-gzip');
+  Cendline := Tencoding.Ascii.Getbytes(#13#10);
+  Creplace := Tencoding.Ascii.Getbytes('%PAR%');
+  Cctdeflate := Tencoding.Ascii.Getbytes('Content-Encoding: deflate');
   //
-  FThreadId := GetCurrentThreadId;
-  FZLevel := 1;
-  GetMem(IBufferTS, 256);
+  Fthreadid := Getcurrentthreadid;
+  Fzlevel := 1;
+  Getmem(Ibufferts, 256);
   //
-  QueryPerformanceFrequency(QFrequency);
-  QElapsedTime := 0;
-  QTotalHits := 0;
-  QTotalBytes := 0;
-  QTotalBytesC := 0;
+  Queryperformancefrequency(Qfrequency);
+  Qelapsedtime := 0;
+  Qtotalhits := 0;
+  Qtotalbytes := 0;
+  Qtotalbytesc := 0;
   //
-  ThInit := True;
+  Thinit := True;
   inherited;
 end;
 
-destructor TThStruct.Destroy;
+destructor Tthstruct.Destroy;
 begin
-  FreeMem(IBufferTS);
+  Freemem(Ibufferts);
   inherited;
 end;
 
-procedure TThStruct.TreatEndOfRequest(pfc: PHTTP_FILTER_CONTEXT);
+procedure Tthstruct.Treatendofrequest(Pfc: Phttp_filter_context);
 begin
-  if DWORD(pfc^.pFilterContext) = 4 then // zerocopy buffering
+  if Dword(Pfc^.Pfiltercontext) = 4 then // zerocopy buffering
   begin
     try
-      QueryPerformanceCounter(QStartTime);
-      IBuffer := nil;
-      SeaZlib.Compress(GpvInData, GcbInData, IBuffer, IBufSize);
-      QueryPerformanceCounter(QEndTime);
-      Inc(QElapsedTime, QEndTime - QStartTime);
-      Inc(QTotalHits);
-      Inc(QTotalBytes, GcbInData);
-      Inc(QTotalBytesC, IBufSize);
+      Queryperformancecounter(Qstarttime);
+      Ibuffer := nil;
+      Seazlib.Compress(Gpvindata, Gcbindata, Ibuffer, Ibufsize);
+      Queryperformancecounter(Qendtime);
+      Inc(Qelapsedtime, Qendtime - Qstarttime);
+      Inc(Qtotalhits);
+      Inc(Qtotalbytes, Gcbindata);
+      Inc(Qtotalbytesc, Ibufsize);
       // InterlockedIncrement64
-      SeaFind(PByte(PHeaders), PHeadersLen, @CReplace[0], 5, @CLen);
-      HelperS := IntToStrF(IBufSize);
-      CLen2 := Length(HelperS);
-      CLen3 := PHeadersLen + 27 - (5 - CLen2);
-      GetMem(Headers, CLen3);
-      HelperP := PByte(Headers);
-      SeaMove(PByte(PHeaders), HelperP, CLen + 17);
-      Inc(HelperP, CLen);
-      SeaMove(PByte(HelperS), HelperP, CLen2);
-      Inc(HelperP, CLen2);
-      HelperP^ := 13;
-      Inc(HelperP);
-      HelperP^ := 10;
-      Inc(HelperP);
-      SeaMove(@CCTDeflate[0], HelperP, 25);
-      Inc(HelperP, 25);
-      CLen2 := PHeadersLen - (CLen + 5);
-      SeaMove(PByte(PHeaders) + CLen + 5, HelperP, CLen2);
+      Seafind(Pbyte(Pheaders), Pheaderslen, @Creplace[0], 5, @Clen);
+      Helpers := Inttostrf(Ibufsize);
+      Clen2 := Length(Helpers);
+      Clen3 := Pheaderslen + 27 - (5 - Clen2);
+      Getmem(Headers, Clen3);
+      Helperp := Pbyte(Headers);
+      Seamove(Pbyte(Pheaders), Helperp, Clen + 17);
+      Inc(Helperp, Clen);
+      Seamove(Pbyte(Helpers), Helperp, Clen2);
+      Inc(Helperp, Clen2);
+      Helperp^ := 13;
+      Inc(Helperp);
+      Helperp^ := 10;
+      Inc(Helperp);
+      Seamove(@Cctdeflate[0], Helperp, 25);
+      Inc(Helperp, 25);
+      Clen2 := Pheaderslen - (Clen + 5);
+      Seamove(Pbyte(Pheaders) + Clen + 5, Helperp, Clen2);
 {$IFDEF DEBUGFILE}
-      SetString(DebugS, PAnsiChar(PByte(Headers)), CLen3);
-      Log('Level5 headers:' + #13#10'START>>' + DebugS + '<<END');
-      SetString(DebugS, PAnsiChar(PByte(IBuffer)), IBufSize);
-      Log('Level5 body:' + #13#10'START>>' + DebugS + '<<END');
+      Setstring(Debugs, Pansichar(Pbyte(Headers)), Clen3);
+      Log('Level5 headers:' + #13#10'START>>' + Debugs + '<<END');
+      Setstring(Debugs, Pansichar(Pbyte(Ibuffer)), Ibufsize);
+      Log('Level5 body:' + #13#10'START>>' + Debugs + '<<END');
 {$ENDIF}
-      TWriteClient(pfc^.WriteClient)(pfc, Headers, @CLen3, 0);
-      TWriteClient(pfc^.WriteClient)(pfc, IBuffer, @IBufSize, 0);
+      Twriteclient(Pfc^.Writeclient)(Pfc, Headers, @Clen3, 0);
+      Twriteclient(Pfc^.Writeclient)(Pfc, Ibuffer, @Ibufsize, 0);
     finally
-      FreeMem(Headers);
-      FreeMem(IBuffer);
+      Freemem(Headers);
+      Freemem(Ibuffer);
     end;
   end
-  else if DWORD(pfc^.pFilterContext) > 4 then // body one-shot buffering
+  else if Dword(Pfc^.Pfiltercontext) > 4 then // body one-shot buffering
   begin
     try
-      QueryPerformanceCounter(QStartTime);
-      IBuffer := nil;
-      SeaZlib.Compress(GBuffer, GBufSize, IBuffer, IBufSize);
-      QueryPerformanceCounter(QEndTime);
-      Inc(QElapsedTime, QEndTime - QStartTime);
-      Inc(QTotalHits);
-      Inc(QTotalBytes, GBufSize);
-      Inc(QTotalBytesC, IBufSize);
-      SeaFind(PByte(PHeaders), PHeadersLen, @CReplace[0], 5, @CLen);
-      HelperS := IntToStrF(IBufSize);
-      CLen2 := Length(HelperS);
-      CLen3 := PHeadersLen + 27 - (5 - CLen2);
-      GetMem(Headers, CLen3);
-      HelperP := PByte(Headers);
-      SeaMove(PByte(PHeaders), HelperP, CLen + 17);
-      Inc(HelperP, CLen);
-      SeaMove(PByte(HelperS), HelperP, CLen2);
-      Inc(HelperP, CLen2);
-      HelperP^ := 13;
-      Inc(HelperP);
-      HelperP^ := 10;
-      Inc(HelperP);
-      SeaMove(@CCTDeflate[0], HelperP, 25);
-      Inc(HelperP, 25);
-      CLen2 := PHeadersLen - (CLen + 5);
-      SeaMove(PByte(PHeaders) + CLen + 5, HelperP, CLen2);
+      Queryperformancecounter(Qstarttime);
+      Ibuffer := nil;
+      Seazlib.Compress(Gbuffer, Gbufsize, Ibuffer, Ibufsize);
+      Queryperformancecounter(Qendtime);
+      Inc(Qelapsedtime, Qendtime - Qstarttime);
+      Inc(Qtotalhits);
+      Inc(Qtotalbytes, Gbufsize);
+      Inc(Qtotalbytesc, Ibufsize);
+      Seafind(Pbyte(Pheaders), Pheaderslen, @Creplace[0], 5, @Clen);
+      Helpers := Inttostrf(Ibufsize);
+      Clen2 := Length(Helpers);
+      Clen3 := Pheaderslen + 27 - (5 - Clen2);
+      Getmem(Headers, Clen3);
+      Helperp := Pbyte(Headers);
+      Seamove(Pbyte(Pheaders), Helperp, Clen + 17);
+      Inc(Helperp, Clen);
+      Seamove(Pbyte(Helpers), Helperp, Clen2);
+      Inc(Helperp, Clen2);
+      Helperp^ := 13;
+      Inc(Helperp);
+      Helperp^ := 10;
+      Inc(Helperp);
+      Seamove(@Cctdeflate[0], Helperp, 25);
+      Inc(Helperp, 25);
+      Clen2 := Pheaderslen - (Clen + 5);
+      Seamove(Pbyte(Pheaders) + Clen + 5, Helperp, Clen2);
 {$IFDEF DEBUGFILE}
-      SetString(DebugS, PAnsiChar(PByte(Headers)), CLen3);
-      Log('Level5+ headers:' + #13#10 + DebugS);
-      SetString(DebugS, PAnsiChar(PByte(IBuffer)), IBufSize);
-      Log('Level5+ body:' + #13#10 + DebugS);
+      Setstring(Debugs, Pansichar(Pbyte(Headers)), Clen3);
+      Log('Level5+ headers:' + #13#10 + Debugs);
+      Setstring(Debugs, Pansichar(Pbyte(Ibuffer)), Ibufsize);
+      Log('Level5+ body:' + #13#10 + Debugs);
 {$ENDIF}
-      TWriteClient(pfc^.WriteClient)(pfc, Headers, @CLen3, 0);
-      TWriteClient(pfc^.WriteClient)(pfc, IBuffer, @IBufSize, 0);
+      Twriteclient(Pfc^.Writeclient)(Pfc, Headers, @Clen3, 0);
+      Twriteclient(Pfc^.Writeclient)(Pfc, Ibuffer, @Ibufsize, 0);
     finally
-      FreeMem(Headers);
-      FreeMem(IBuffer);
-      FreeMem(GBuffer);
+      Freemem(Headers);
+      Freemem(Ibuffer);
+      Freemem(Gbuffer);
     end;
   end;
 end;
 
-procedure TThStruct.TreatSendRawData(pfc: PHTTP_FILTER_CONTEXT; PvNotification: Pointer);
+procedure Tthstruct.Treatsendrawdata(Pfc: Phttp_filter_context; Pvnotification: Pointer);
 begin
-  with THTTP_FILTER_RAW_DATA(PvNotification^) do
+  with Thttp_filter_raw_data(Pvnotification^) do
   begin
-    SeaCompare(pvInData, @CHttp1[0], 14, @CLen); // todo: http2 compatibility
-    if (CLen = 0) then
+    Seacompare(Pvindata, @Chttp1[0], 14, @Clen); // todo: http2 compatibility
+    if (Clen = 0) then
     begin
 {$IFDEF DEBUGFILE}
-      SetString(DebugS, PAnsiChar(pvInData), cbInData);
-      Log('Level1:' + #13#10 + 'CbInData:' + IntToStr(cbInData) + #13#10 + 'cbInBuffer:' + IntToStr(cbInBuffer) + #13#10 + '-' + #13#10 + DebugS);
+      Setstring(Debugs, Pansichar(Pvindata), Cbindata);
+      Log('Level1:' + #13#10 + 'CbInData:' + Inttostr(Cbindata) + #13#10 + 'cbInBuffer:' + Inttostr(Cbinbuffer) + #13#10 + '-' +
+        #13#10 + Debugs);
 {$ENDIF}
-      if (cbInData < 100) or (cbInData > 99999) then
+      if (Cbindata < 100) or (Cbindata > 99999) then
         Exit; // testare
-      SeaFind(pvInData, cbInData, @CCrlf[0], 4, @CLen);
-      if CLen > -1 then
+      Seafind(Pvindata, Cbindata, @Ccrlf[0], 4, @Clen);
+      if Clen > -1 then
       begin
-        SeaFind(pvInData, CLen, @CCtext[0], 19, @CLen);
-        if CLen > -1 then
+        Seafind(Pvindata, Clen, @Cctext[0], 19, @Clen);
+        if Clen > -1 then
         begin
-          PHeaders := pvInData;
-          PHeadersLen := cbInData;
-          cbInData := 0;
-          cbInBuffer := 0;
-          pfc^.pFilterContext := PDWORD(3);
+          Pheaders := Pvindata;
+          Pheaderslen := Cbindata;
+          Cbindata := 0;
+          Cbinbuffer := 0;
+          Pfc^.Pfiltercontext := Pdword(3);
         end
         else
         begin
-          SeaFind(pvInData, CLen, @CCtext2[0], 22, @CLen);
-          if CLen > -1 then
+          Seafind(Pvindata, Clen, @Cctext2[0], 22, @Clen);
+          if Clen > -1 then
           begin
-            PHeaders := pvInData;
-            PHeadersLen := cbInData;
-            cbInData := 0;
-            cbInBuffer := 0;
-            pfc^.pFilterContext := PDWORD(3);
+            Pheaders := Pvindata;
+            Pheaderslen := Cbindata;
+            Cbindata := 0;
+            Cbinbuffer := 0;
+            Pfc^.Pfiltercontext := Pdword(3);
           end
           else
           begin
-            SeaFind(pvInData, CLen, @CCtext3[0], 36, @CLen);
-            if CLen > -1 then
+            Seafind(Pvindata, Clen, @Cctext3[0], 36, @Clen);
+            if Clen > -1 then
             begin
-              PHeaders := pvInData;
-              PHeadersLen := cbInData;
-              cbInData := 0;
-              cbInBuffer := 0;
-              pfc^.pFilterContext := PDWORD(3);
+              Pheaders := Pvindata;
+              Pheaderslen := Cbindata;
+              Cbindata := 0;
+              Cbinbuffer := 0;
+              Pfc^.Pfiltercontext := Pdword(3);
             end
             else
             begin
-              SeaFind(pvInData, CLen, @CCtext4[0], 38, @CLen);
-              if CLen > -1 then
+              Seafind(Pvindata, Clen, @Cctext4[0], 38, @Clen);
+              if Clen > -1 then
               begin
-                PHeaders := pvInData;
-                PHeadersLen := cbInData;
-                cbInData := 0;
-                cbInBuffer := 0;
-                pfc^.pFilterContext := PDWORD(3);
+                Pheaders := Pvindata;
+                Pheaderslen := Cbindata;
+                Cbindata := 0;
+                Cbinbuffer := 0;
+                Pfc^.Pfiltercontext := Pdword(3);
               end
               else
               begin
-                SeaFind(pvInData, CLen, @CCtext5[0], 29, @CLen);
-                if CLen > -1 then
+                Seafind(Pvindata, Clen, @Cctext5[0], 29, @Clen);
+                if Clen > -1 then
                 begin
-                  PHeaders := pvInData;
-                  PHeadersLen := cbInData;
-                  cbInData := 0;
-                  cbInBuffer := 0;
-                  pfc^.pFilterContext := PDWORD(3);
+                  Pheaders := Pvindata;
+                  Pheaderslen := Cbindata;
+                  Cbindata := 0;
+                  Cbinbuffer := 0;
+                  Pfc^.Pfiltercontext := Pdword(3);
                 end;
               end;
             end;
@@ -506,82 +509,83 @@ begin
     end
     else
     begin
-      if DWORD(pfc.pFilterContext) = 3 then
+      if Dword(Pfc.Pfiltercontext) = 3 then
       begin
 {$IFDEF DEBUGFILE}
-        SetString(DebugS, PAnsiChar(pvInData), cbInData);
-        Log('Level2:' + #13#10 + 'CbInData:' + IntToStr(cbInData) + #13#10 + 'cbInBuffer:' + IntToStr(cbInBuffer) + #13#10 + '-' + #13#10 + DebugS);
+        Setstring(Debugs, Pansichar(Pvindata), Cbindata);
+        Log('Level2:' + #13#10 + 'CbInData:' + Inttostr(Cbindata) + #13#10 + 'cbInBuffer:' + Inttostr(Cbinbuffer) + #13#10 + '-' +
+          #13#10 + Debugs);
 {$ENDIF}
-        GpvInData := pvInData;
-        GcbInData := cbInData;
-        cbInData := 0;
-        cbInBuffer := 0;
-        pfc^.pFilterContext := PDWORD(4); // go stage index 4
+        Gpvindata := Pvindata;
+        Gcbindata := Cbindata;
+        Cbindata := 0;
+        Cbinbuffer := 0;
+        Pfc^.Pfiltercontext := Pdword(4); // go stage index 4
       end
       else
       begin
-        if DWORD(pfc^.pFilterContext) = 4 then
+        if Dword(Pfc^.Pfiltercontext) = 4 then
         begin
-          GBufSize := GcbInData + cbInData;
-          GetMem(GBuffer, GBufSize);
-          SeaMove(GpvInData, GBuffer, GcbInData);
-          SeaMove(pvInData, PByte(GBuffer) + GcbInData, cbInData);
+          Gbufsize := Gcbindata + Cbindata;
+          Getmem(Gbuffer, Gbufsize);
+          Seamove(Gpvindata, Gbuffer, Gcbindata);
+          Seamove(Pvindata, Pbyte(Gbuffer) + Gcbindata, Cbindata);
 {$IFDEF DEBUGFILE}
-          SetString(DebugS, PAnsiChar(pvInData), cbInData);
-          Log('Level3:' + #13#10 + 'CbInData:' + IntToStr(cbInData) + #13#10 + 'cbInBuffer:' + IntToStr(cbInBuffer) + #13#10 + 'GcbInData:' +
-            IntToStr(GcbInData) + #13#10 + 'GBufSize:' + #13#10 + '-' + #13#10 + DebugS);
+          Setstring(Debugs, Pansichar(Pvindata), Cbindata);
+          Log('Level3:' + #13#10 + 'CbInData:' + Inttostr(Cbindata) + #13#10 + 'cbInBuffer:' + Inttostr(Cbinbuffer) + #13#10 +
+            'GcbInData:' + Inttostr(Gcbindata) + #13#10 + 'GBufSize:' + #13#10 + '-' + #13#10 + Debugs);
 {$ENDIF}
-          cbInData := 0;
-          cbInBuffer := 0;
-          pfc^.pFilterContext := PDWORD(5); // go stage index 5
+          Cbindata := 0;
+          Cbinbuffer := 0;
+          Pfc^.Pfiltercontext := Pdword(5); // go stage index 5
         end
         else
         begin // 5+
-          ReallocMem(GBuffer, GBufSize + cbInData);
-          SeaMove(pvInData, PByte(GBuffer) + GBufSize, cbInData);
-          Inc(GBufSize, cbInData);
+          Reallocmem(Gbuffer, Gbufsize + Cbindata);
+          Seamove(Pvindata, Pbyte(Gbuffer) + Gbufsize, Cbindata);
+          Inc(Gbufsize, Cbindata);
 {$IFDEF DEBUGFILE}
-          SetString(DebugS, PAnsiChar(pvInData), cbInData);
-          Log('Level4+:' + #13#10 + 'CbInData:' + IntToStr(cbInData) + #13#10 + 'cbInBuffer:' + IntToStr(cbInBuffer) + #13#10 + 'GcbInData:' +
-            IntToStr(GcbInData) + #13#10 + 'GBufSize:' + #13#10 + '-' + #13#10 + DebugS);
+          Setstring(Debugs, Pansichar(Pvindata), Cbindata);
+          Log('Level4+:' + #13#10 + 'CbInData:' + Inttostr(Cbindata) + #13#10 + 'cbInBuffer:' + Inttostr(Cbinbuffer) + #13#10 +
+            'GcbInData:' + Inttostr(Gcbindata) + #13#10 + 'GBufSize:' + #13#10 + '-' + #13#10 + Debugs);
 {$ENDIF}
-          cbInData := 0;
-          cbInBuffer := 0;
+          Cbindata := 0;
+          Cbinbuffer := 0;
         end;
       end;
     end;
   end;
 end;
 
-procedure TThStruct.TreatSendResponse(pfc: PHTTP_FILTER_CONTEXT; PvNotification: Pointer);
+procedure Tthstruct.Treatsendresponse(Pfc: Phttp_filter_context; Pvnotification: Pointer);
 begin
-  with THTTP_FILTER_SEND_RESPONSE(PvNotification^) do
+  with Thttp_filter_send_response(Pvnotification^) do
   begin
-    SeaZero(@IBufferTS, 256);
-    CLen := 256;
-    if not TGetHeader(GetHeader)(pfc, @CTransfer[0], @IBufferTS, @CLen) then
+    Seazero(@Ibufferts, 256);
+    Clen := 256;
+    if not Tgetheader(Getheader)(Pfc, @Ctransfer[0], @Ibufferts, @Clen) then
     begin
-      SeaZero(@IBufferTS, 256);
-      CLen := 256;
-      if TGetServerVariable(pfc.GetServerVariable)(pfc, @CAccept[0], @IBufferTS, @CLen) then
+      Seazero(@Ibufferts, 256);
+      Clen := 256;
+      if Tgetservervariable(Pfc.Getservervariable)(Pfc, @Caccept[0], @Ibufferts, @Clen) then
       begin
-        SeaFind(@IBufferTS, 256, @CDeflate[0], 7, @CLen);
-        if CLen > 0 then
+        Seafind(@Ibufferts, 256, @Cdeflate[0], 7, @Clen);
+        if Clen > 0 then
         begin
-          SeaZero(@IBufferTS, 256);
-          CLen := 256;
-          TGetHeader(GetHeader)(pfc, @CContent[0], @IBufferTS, @CLen);
-          SeaFind(@IBufferTS, 256, @CDeflate[0], 7, @CLen);
-          if CLen = -1 then
+          Seazero(@Ibufferts, 256);
+          Clen := 256;
+          Tgetheader(Getheader)(Pfc, @Ccontent[0], @Ibufferts, @Clen);
+          Seafind(@Ibufferts, 256, @Cdeflate[0], 7, @Clen);
+          if Clen = -1 then
           begin
-            SeaFind(@IBufferTS, 256, @CGzip[0], 4, @CLen);
-            if CLen = -1 then
+            Seafind(@Ibufferts, 256, @Cgzip[0], 4, @Clen);
+            if Clen = -1 then
             begin
-              SeaFind(@IBufferTS, 256, @CXGzip[0], 6, @CLen);
-              if CLen = -1 then
+              Seafind(@Ibufferts, 256, @Cxgzip[0], 6, @Clen);
+              if Clen = -1 then
               begin
-                TSetHeader(SetHeader)(pfc, @CLength[0], @CReplace[0]);
-                pfc^.pFilterContext := PDWORD(3);
+                Tsetheader(Setheader)(Pfc, @Clength[0], @Creplace[0]);
+                Pfc^.Pfiltercontext := Pdword(3);
               end;
             end;
           end;
@@ -591,38 +595,38 @@ begin
   end;
 end;
 
-procedure TThStruct.TreatUrlMap(pfc: PHTTP_FILTER_CONTEXT; PvNotification: Pointer);
+procedure Tthstruct.Treaturlmap(Pfc: Phttp_filter_context; Pvnotification: Pointer);
 begin
-  pfc^.pFilterContext := PDWORD(0);
-  with THTTP_FILTER_URL_MAP(PvNotification^) do
+  Pfc^.Pfiltercontext := Pdword(0);
+  with Thttp_filter_url_map(Pvnotification^) do
   begin
-    CLen := Length(pszURL);
-    if CLen > 4 then // #.EXT len 5
+    Clen := Length(Pszurl);
+    if Clen > 4 then // #.EXT len 5
     begin
-      HelperP := PByte(pszURL) + CLen;
-      SeaCompare(HelperP - 4, @CAspx[0], 4, @CLen);
-      if CLen = 0 then
-        pfc^.pFilterContext := PDWORD(1)
+      Helperp := Pbyte(Pszurl) + Clen;
+      Seacompare(Helperp - 4, @Caspx[0], 4, @Clen);
+      if Clen = 0 then
+        Pfc^.Pfiltercontext := Pdword(1)
       else
       begin
-        SeaCompare(HelperP - 3, @CDll[0], 3, @CLen);
-        if CLen = 0 then
-          pfc^.pFilterContext := PDWORD(1)
+        Seacompare(Helperp - 3, @Cdll[0], 3, @Clen);
+        if Clen = 0 then
+          Pfc^.Pfiltercontext := Pdword(1)
         else
         begin
-          SeaCompare(HelperP - 3, @CPhp[0], 3, @CLen);
-          if CLen = 0 then
-            pfc^.pFilterContext := PDWORD(1)
+          Seacompare(Helperp - 3, @Cphp[0], 3, @Clen);
+          if Clen = 0 then
+            Pfc^.Pfiltercontext := Pdword(1)
           else
           begin
-            SeaCompare(HelperP - 3, @CAspOld[0], 3, @CLen);
-            if CLen = 0 then
-              pfc^.pFilterContext := PDWORD(1)
+            Seacompare(Helperp - 3, @Caspold[0], 3, @Clen);
+            if Clen = 0 then
+              Pfc^.Pfiltercontext := Pdword(1)
             else
             begin
-              SeaCompare(HelperP - 3, @CJava[0], 3, @CLen);
-              if CLen = 0 then
-                pfc^.pFilterContext := PDWORD(1)
+              Seacompare(Helperp - 3, @Cjava[0], 3, @Clen);
+              if Clen = 0 then
+                Pfc^.Pfiltercontext := Pdword(1)
             end;
           end;
         end;
@@ -631,79 +635,80 @@ begin
   end;
 end;
 
-function HttpFilterProc(pfc: PHTTP_FILTER_CONTEXT; NotificationType: DWORD; PvNotification: LPVOID): DWORD; export; stdcall;
+function Httpfilterproc(Pfc: Phttp_filter_context; Notificationtype: Dword; Pvnotification: Lpvoid): Dword; export; stdcall;
 begin
-  Result := SF_STATUS_REQ_NEXT_NOTIFICATION;
+  Result := Sf_status_req_next_notification;
   try
-    case NotificationType of
-      SF_NOTIFY_URL_MAP:
+    case Notificationtype of
+      Sf_notify_url_map:
         begin
-          if not ThInit then // eventually use entrypoint DLL_THREAD_ATTACH
-            ThWork := TThStruct.Create;
-          ThWork.TreatUrlMap(pfc, PvNotification);
+          if not Thinit then // eventually use entrypoint DLL_THREAD_ATTACH
+            Thwork := Tthstruct.Create;
+          Thwork.Treaturlmap(Pfc, Pvnotification);
         end;
-      SF_NOTIFY_SEND_RESPONSE:
-        if DWORD(pfc^.pFilterContext) = 1 then
+      Sf_notify_send_response:
+        if Dword(Pfc^.Pfiltercontext) = 1 then
         begin
-          if not ThInit then
-            ThWork := TThStruct.Create;
-          ThWork.TreatSendResponse(pfc, PvNotification);
+          if not Thinit then
+            Thwork := Tthstruct.Create;
+          Thwork.Treatsendresponse(Pfc, Pvnotification);
         end;
-      SF_NOTIFY_SEND_RAW_DATA:
-        if DWORD(pfc^.pFilterContext) > 1 then
+      Sf_notify_send_raw_data:
+        if Dword(Pfc^.Pfiltercontext) > 1 then
         begin
-          if not ThInit then
-            ThWork := TThStruct.Create;
-          ThWork.TreatSendRawData(pfc, PvNotification);
+          if not Thinit then
+            Thwork := Tthstruct.Create;
+          Thwork.Treatsendrawdata(Pfc, Pvnotification);
         end;
-      SF_NOTIFY_END_OF_REQUEST:
-        if DWORD(pfc^.pFilterContext) > 3 then
+      Sf_notify_end_of_request:
+        if Dword(Pfc^.Pfiltercontext) > 3 then
         begin
-          if not ThInit then
-            ThWork := TThStruct.Create;
-          ThWork.TreatEndOfRequest(pfc);
+          if not Thinit then
+            Thwork := Tthstruct.Create;
+          Thwork.Treatendofrequest(Pfc);
         end;
     end;
   except
-    on E: exception do
+    on E: Exception do
     begin
-      Result := SF_STATUS_REQ_NEXT_NOTIFICATION;
-//    Log('Exception: ' + E.Message + #13#10 + 'StackTrace:' + #13#10 + E.StackTrace);
+      Result := Sf_status_req_next_notification;
+      // Log('Exception: ' + E.Message + #13#10 + 'StackTrace:' + #13#10 + E.StackTrace);
     end;
   end;
 end;
 
-function GetFilterVersion(pVer: PHTTP_FILTER_VERSION): BOOL; export; stdcall;
+function Getfilterversion(Pver: Phttp_filter_version): Bool; export; stdcall;
 begin
-  pVer^.lpszFilterDesc := 'Roberto Della Pasqua 1974 - www.dellapasqua.com - Parallel SIMD Deflate 2.02 - 03 Sept 2017';
-  pVer^.dwFilterVersion := Makelong(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
-  pVer^.DwFlags := SF_NOTIFY_ORDER_LOW or SF_NOTIFY_URL_MAP or SF_NOTIFY_SEND_RAW_DATA or SF_NOTIFY_SEND_RESPONSE or SF_NOTIFY_END_OF_REQUEST;
+  Pver^.Lpszfilterdesc := 'Roberto Della Pasqua 1974 - www.dellapasqua.com - Parallel SIMD Deflate 2.02 - 03 Sept 2017';
+  Pver^.Dwfilterversion := Makelong(Hse_version_minor, Hse_version_major);
+  Pver^.Dwflags := Sf_notify_order_low or Sf_notify_url_map or Sf_notify_send_raw_data or Sf_notify_send_response or
+    Sf_notify_end_of_request;
   Result := True;
 end;
 
-function TerminateFilter(DwFlags: DWORD): BOOL; export; stdcall;
+function Terminatefilter(Dwflags: Dword): Bool; export; stdcall;
 begin
   Result := True;
 end;
 
-procedure DLLEntryPoint(Reason: DWORD);
+procedure Dllentrypoint(Reason: Dword);
 // detach free struct
 begin
-  if Reason = Dll_Thread_Detach then
+  if Reason = Dll_thread_detach then
   begin
-    if ThInit then
+    if Thinit then
     begin
-      FreeAndNil(ThWork);
-      ThInit := False;
+      Freeandnil(Thwork);
+      Thinit := False;
     end;
   end;
 end;
 
-exports GetFilterVersion, HttpFilterProc, TerminateFilter;
+exports Getfilterversion, Httpfilterproc, Terminatefilter;
 
 begin
-  IsMultiThread := False; // avoid thread contention in new MM
-  DllProc := @DLLEntryPoint;
+  Ismultithread := False; // avoid thread contention in new MM
+  Dllproc := @Dllentrypoint;
 
   // controllare se il content-length deve essere 5
   // controllare se content < 99999 > 999 then exit
