@@ -28,6 +28,8 @@ Another test with DMVC web api, on I9 cpu and windows 2016, simulating with apac
 
 Another test, a ISAPI, on I9 cpu and windows 2016, doing in sequence DB query -> dataset of 1500 lines x 10 rows -> serialize to json string -> shrink it with deflate, is populating 2000 http reqs/sec, correctly filling all the cpu cores
 
+Another simple WebBroker Indy app jumps from 542 reqs/s to 3364 reqs/s (i9 cpu hyper-v windows 2022 server)
+
 If you want enable accelerated zlib programmatically into your WebBroker app, just add one line of code in afterdispatch event:
 
 - procedure TWebModule.WebModuleAfterDispatch(Sender: TObject; Request: TWebRequest; Response: TWebResponse; var Handled: Boolean); 
