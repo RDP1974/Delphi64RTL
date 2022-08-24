@@ -39,7 +39,7 @@ btw. rem // RedirectCode(@System.Move, @Move2); in RDPSimd64 if you have single 
 
 The library is well tested, but if you found any trouble please notify me.
 
-The library is linked to visual c++ ucrt, so you need to install visual c++ latest redistributables, if so you can freely deploy everywhere
+The library is linked to visual c++ ucrt, so you need to install visual c++ latest redistributable
 
 Thank you and best regards
 
