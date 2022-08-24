@@ -3,28 +3,19 @@ https://www.intel.com/content/www/us/en/developer/tools/oneapi/ipp.html
 https://www.intel.com/content/www/us/en/developer/tools/oneapi/onetbb.html
 
 Copyright (c) 2019 Roberto Della Pasqua
-
 Use and Redistribution.  You may use and redistribute the software (the “Software”) libraries (DLL), without modification, provided the following conditions are met:
-
 * No redistributions of source code permitted without author permission.
-
 * No reverse engineering, decompilation, or disassembly of this Software is permitted.
-
 * Freely donateware (contact me roberto.dellapasqua@live.com or www.dellapasqua.com).
 
 DISCLAIMER.  THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT ARE DISCLAIMED. THIS SOFTWARE IS NOT INTENDED FOR USE IN SYSTEMS OR APPLICATIONS WHERE FAILURE OF THE SOFTWARE MAY CAUSE PERSONAL INJURY OR DEATH AND YOU AGREE THAT YOU ARE FULLY RESPONSIBLE FOR ANY CLAIMS, COSTS, DAMAGES, EXPENSES, AND ATTORNEYS’ FEES ARISING OUT OF ANY SUCH USE, EVEN IF ANY CLAIM ALLEGES THAT ROBERTO DELLA PASQUA WAS NEGLIGENT REGARDING THE DESIGN OR MANUFACTURE OF THE MATERIALS.
 
 LIMITATION OF LIABILITY. IN NO EVENT WILL ROBERTO DELLA PASQUA BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. YOU AGREE TO INDEMNIFY AND HOLD ROBERTO DELLA PASQUA HARMLESS AGAINST ANY CLAIMS AND EXPENSES RESULTING FROM YOUR USE OR UNAUTHORIZED USE OF THE SOFTWARE.
 
-
 Copyright (c) 2018 Intel Corporation.
-
 Use and Redistribution.  You may use and redistribute the software (the “Software”), without modification, provided the following conditions are met:
-
 * Redistributions must reproduce the above copyright notice and the following terms of use in the Software and in the documentation and/or other materials provided with the distribution.
-
 * Neither the name of Intel nor the names of its suppliers may be used to endorse or promote products derived from this Software without specific prior written permission.
-
 * No reverse engineering, decompilation, or disassembly of this Software is permitted.
 
 Limited patent license.  Intel grants you a world-wide, royalty-free, non-exclusive license under patents it now or hereafter owns or controls to make, have made, use, import, offer to sell and sell (“Utilize”) this Software, but solely to the extent that any such patent is necessary to Utilize the Software alone. The patent license shall not apply to any combinations which include this software.  No hardware per se is licensed hereunder.
