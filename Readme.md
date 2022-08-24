@@ -38,6 +38,7 @@ If you want enable accelerated zlib programmatically into your WebBroker app, ju
 btw. rem // RedirectCode(@System.Move, @Move2); in RDPSimd64 if you have single threaded app with smallest ram allocations
 
 The library is well tested, but if you found any trouble please notify me.
+The library is linked to visual c++ ucrt, so you need to install visual c++ latest redistributables
 
 Thank you and best regards
 
