@@ -3,7 +3,7 @@ https://www.intel.com/content/www/us/en/developer/tools/oneapi/ipp.html
 https://www.intel.com/content/www/us/en/developer/tools/oneapi/onetbb.html
 
 Copyright (c) 2019 Roberto Della Pasqua
-Use and Redistribution.  You may use and redistribute the software (the “Software”) libraries (DLL), without modification, provided the following conditions are met:
+Use and Redistribution.  You may use and redistribute the software (the “Software”) libraries, without modification, provided the following conditions are met:
 * No redistributions of source code permitted without author permission.
 * No reverse engineering, decompilation, or disassembly of this Software is permitted.
 * Freely donateware (contact me roberto.dellapasqua@live.com or www.dellapasqua.com).
