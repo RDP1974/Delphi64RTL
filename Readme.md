@@ -4,7 +4,7 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 
 Copyright 17 June 2019 Roberto Della Pasqua (updated 9 March 2020)
 
-24 August 2022 DLL built with the latest OneAPI and TBB ver. 2021.6
+24 August 2022 DLLs built with the latest OneAPI and TBB ver. 2021.6
 
 This folder contains:
 
