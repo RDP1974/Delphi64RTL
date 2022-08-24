@@ -41,7 +41,7 @@ The library is well tested, run on Intel and AMD x64 Windows, if you found any t
 
 Contact me roberto.dellapasqua@live.com or www.dellapasqua.com
 
-The library is linked to visual c++ ucrt, so you need to install visual c++ latest redistributable
+The library is linked to visual c++ ucrt, so you need to install visual c++ runtime latest redistributable
 
 Thank you and best regards
 
