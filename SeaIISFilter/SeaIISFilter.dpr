@@ -710,7 +710,4 @@ begin
   Ismultithread := False; // avoid thread contention in new MM
   Dllproc := @Dllentrypoint;
 
-  // controllare se il content-length deve essere 5
-  // controllare se content < 99999 > 999 then exit
-  // testare chunk-encoding dovrebbe passare
 end.
