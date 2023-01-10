@@ -5,12 +5,13 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 Copyright 17 June 2019 Roberto Della Pasqua (updated 9 March 2020)
 
 24 August 2022 DLLs built with the latest stable OneAPI and TBB ver. 2021.6
+10 January 2023 updated zlib 1.2.13 with latest Intel IPP
 
 This folder contains:
 
 - SeaMM.dll lock-free scalable allocator (ver. 2022 102912 bytes)
 - SeaRTL.dll simd enabled rtl subset routines (ver. 2022 201728 bytes)
-- SeaZIP.dll accelerated zlib deflate compression (ver. 2020 969728 bytes)
+- SeaZIP.dll accelerated zlib deflate compression (ver. 2023 978944 bytes)
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
 - RDPSimd64.pas wrapper for simd rtl
 - RDPZlib64.pas wrapper for zlib deflate
