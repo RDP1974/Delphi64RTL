@@ -2,8 +2,7 @@ Sea RTL subset for Delphi 64bit
 
 Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Threading Building Blocks royalty-free packages
 
-Copyright 17 June 2019 Roberto Della Pasqua (updated 10 January 2023)
-
+17 June 2019 Roberto Della Pasqua www.dellapasqua.com<br>
 24 August 2022 DLLs built with the latest stable OneAPI and TBB ver. 2021.6<br>
 10 January 2023 updated zlib to 1.2.13 with latest Intel IPP ver. 2021.7
 
