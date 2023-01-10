@@ -2,6 +2,7 @@ unit RDPZlib64;
 
 // 28 febr 2019 Roberto Della Pasqua www.dellapasqua.com
 // 3 march 2020 added inflate support
+// 10 jan 2023 updated to zlib 1.2.13 Intel IPP latest version
 
 interface
 
@@ -10,8 +11,8 @@ uses
 
 const
   ZLIBDLL = 'SeaZIP.dll';
-  ZLIB_VERSION: PAnsiChar = '1.2.11';
-  ZLIB_VERNUM = $1280;
+  ZLIB_VERSION: PAnsiChar = '1.2.13';
+  ZLIB_VERNUM = $12d0;
   Z_FINISH = 4;
   Z_NO_FLUSH = 0;
   Z_OK = 0;
