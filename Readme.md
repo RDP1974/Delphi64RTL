@@ -2,7 +2,7 @@ Sea RTL subset for Delphi 64bit
 
 Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Threading Building Blocks royalty-free packages
 
-Copyright 17 June 2019 Roberto Della Pasqua (updated 9 March 2020)
+Copyright 17 June 2019 Roberto Della Pasqua (updated 10 January 2023)
 
 24 August 2022 DLLs built with the latest stable OneAPI and TBB ver. 2021.6<br>
 10 January 2023 updated to zlib 1.2.13 with latest Intel IPP ver. 2021.7
@@ -16,7 +16,8 @@ This folder contains:
 - RDPSimd64.pas wrapper for simd rtl
 - RDPZlib64.pas wrapper for zlib deflate
 - RDPWebBroker64.pas utils to enhance webbroker web apps
-- SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)
+- SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)<br>
+(will update it soon with a small project built over this extension)
 - License.txt for legal terms
 
 A test with Indy, the built-in TCP Delphi library, on I7 cpu, shows an enhancement from 6934.29 ops/sec to 23097.68 ops/sec
