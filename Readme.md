@@ -42,7 +42,8 @@ thanks to https://fastcode.sourceforge.net, https://github.com/synopse/mORMot, h
 
 Contact me: roberto dot dellapasqua at live.com
 
-The library is linked to visual c++ ucrt, so you need to install visual c++ runtime latest redistributable
+The library is linked to visual c++ ucrt, so you need to install visual c++ runtime latest redistributable<br>
+https://learn.microsoft.com/it-it/cpp/windows/latest-supported-vc-redist
 
 Thank you and best regards
 
