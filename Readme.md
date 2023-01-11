@@ -43,7 +43,7 @@ thanks to the Delphi community and guru<br>
 Contact me: roberto dot dellapasqua at live.com
 
 The library is linked to visual c++ ucrt, so you need to install visual c++ runtime latest redistributable<br>
-learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
+https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
 
 Thank you and best regards
 
