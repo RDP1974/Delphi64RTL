@@ -34,7 +34,7 @@ If you want enable accelerated zlib programmatically into your WebBroker app, ju
 
 - procedure TWebModule.WebModuleAfterDispatch(Sender: TObject; Request: TWebRequest; Response: TWebResponse; var Handled: Boolean); 
 - begin 
-- Response.ZlibDeflate; 
+- Response.ZlibDeflate; // will update this method soon to accomodate exceptions on some kind of data
 - end;
 
 The library is well tested, runs on Intel and AMD x64 Windows, if you found any trouble please notify me.<br>
