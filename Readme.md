@@ -15,6 +15,7 @@ This folder contains:
 - RDPSimd64.pas wrapper for simd rtl
 - RDPZlib64.pas wrapper for zlib deflate
 - RDPWebBroker64.pas utils to enhance webbroker web apps
+(will update it soon with exceptions management)
 - SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)<br>
 (will update it soon with a small project built over this extension)
 - License.txt for legal terms
