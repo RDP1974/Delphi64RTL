@@ -37,8 +37,8 @@ If you want enable accelerated zlib programmatically into your WebBroker app, ju
 - Response.ZlibDeflate; // will update this method soon to accomodate exceptions on some kind of data
 - end;
 
-The library is well tested, runs on Intel and AMD x64 Windows, if you found any trouble please notify me.<br>
-thanks to fastcode.sourceforge.net, github.com/synopse/mORMot, www.tmssoftware.com, and many others<br>
+The library is well tested, runs on Intel and AMD x64 Windows, if you found any trouble please notify me<br>
+thanks to the Delphi community and guru<br>
 
 Contact me: roberto dot dellapasqua at live.com
 
