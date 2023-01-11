@@ -38,12 +38,12 @@ If you want enable accelerated zlib programmatically into your WebBroker app, ju
 - end;
 
 The library is well tested, runs on Intel and AMD x64 Windows, if you found any trouble please notify me.<br>
-thanks to https://fastcode.sourceforge.net, https://github.com/synopse/mORMot, https://www.tmssoftware.com, and many others<br>
+thanks to fastcode.sourceforge.net, github.com/synopse/mORMot, www.tmssoftware.com, and many others<br>
 
 Contact me: roberto dot dellapasqua at live.com
 
 The library is linked to visual c++ ucrt, so you need to install visual c++ runtime latest redistributable<br>
-https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
+learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
 
 Thank you and best regards
 
