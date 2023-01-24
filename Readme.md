@@ -10,7 +10,7 @@ This folder contains:
 
 - SeaMM.dll lock-free scalable allocator (ver. 2022 102912 bytes)(MD5 8c3eabde5e916ea4aded5e248ceb29de)
 - SeaRTL.dll simd enabled rtl subset routines (ver. 2022 201728 bytes)(MD5 b7fe56a81870b13b466816fe4e268d78)
-- SeaZIP.dll accelerated zlib deflate compression (ver. 2023 978944 bytes)(MD5 c916569b4e8e974d226c898164675989) 
+- SeaZIP.dll accelerated zlib compression (ver. 2023 978944 bytes)(MD5 c916569b4e8e974d226c898164675989) 
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
 - RDPSimd64.pas wrapper for simd rtl
 - RDPZlib64.pas wrapper for zlib deflate
