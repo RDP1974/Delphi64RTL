@@ -4,7 +4,7 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 
 17 June 2019 Roberto Della Pasqua www.dellapasqua.com<br>
 24 August 2022 DLLs built with the latest stable Intel OneAPI and TBB ver. 2021.6<br>
-10 January 2023 updated zlib to 1.2.13 with latest Intel IPP ver. 2021.7
+10 January 2023 updated zlib to 1.2.13 with latest Intel IPP ver. 2021.7<br>
 20 February 2023 updated webbroker deflate helper for reliability
 
 This folder contains:
