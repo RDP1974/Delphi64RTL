@@ -29,7 +29,7 @@ var
   Src, Dst: TBytes;
   Cl: string;
 begin
-  Cl := Lowercase(ContentType);
+  Cl := Lowercase(ContentType); // example ContentType := 'application/json; charset="UTF-8"';
   if ((Pos('text', Cl) > 0) or (Pos('json', Cl) > 0) and (Pos('utf-8', Cl) > 0)) then
   begin
     if ContentStream = nil then // use content string
