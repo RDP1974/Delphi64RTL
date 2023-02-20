@@ -5,6 +5,7 @@ unit RDPWebBroker64;
 // define SEAZLIB for compression realtime speed up
 // 26 Febr 2020 buffer len check
 // 20 Febr 2023 updated zlibdeflate for correct mime
+// be careful to set the correct content-type with utf-8 charset
 
 {$DEFINE SEAZLIB}
 
