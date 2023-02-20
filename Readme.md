@@ -5,6 +5,7 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 17 June 2019 Roberto Della Pasqua www.dellapasqua.com<br>
 24 August 2022 DLLs built with the latest stable Intel OneAPI and TBB ver. 2021.6<br>
 10 January 2023 updated zlib to 1.2.13 with latest Intel IPP ver. 2021.7
+20 February 2023 updated webbroker deflate helper for reliability
 
 This folder contains:
 
@@ -34,7 +35,7 @@ If you want enable accelerated zlib programmatically into your WebBroker app, ju
 
 - procedure TWebModule.WebModuleAfterDispatch(Sender: TObject; Request: TWebRequest; Response: TWebResponse; var Handled: Boolean); 
 - begin 
-- Response.ZlibDeflate; // will update this method soon to accomodate exceptions on some kind of data
+- Response.ZlibDeflate;
 - end;
 
 The library is well tested, run on Intel and Amd x64 Windows, if you found any trouble please notify me;<br>
