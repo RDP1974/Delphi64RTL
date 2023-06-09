@@ -15,10 +15,8 @@ This folder contains:
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
 - RDPSimd64.pas wrapper for simd rtl
 - RDPZlib64.pas wrapper for zlib deflate
-- RDPWebBroker64.pas utils to enhance webbroker web apps<br>
-(level -2 AC mode in deflate call should be used over UTF-8 streams for web optimization, if you need to compress binary contents use level from 1 to 9)<br> 
-- SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)<br>
-(will update it with a small project built over this extension)
+- RDPWebBroker64.pas utils to enhance webbroker web apps (level -2 AC mode in deflate call should be used over UTF-8 streams for web optimization, if you need to compress binary contents use level from 1 to 9)<br> 
+- SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)(will update it with a small project built over this extension)
 - License.txt for legal terms
 
 A test with Indy, the built-in TCP Delphi library, on I7 cpu, show an enhancement from 6934.29 ops/sec to 23097.68 ops/sec
