@@ -6,10 +6,12 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 24 August 2022 DLL built with the latest stable Intel OneAPI and TBB ver. 2021.6<br>
 10 January 2023 updated zlib to 1.2.13 with latest Intel IPP ver. 2021.7<br>
 20 February 2023 updated webbroker deflate helper for reliability
+02 November 2023 optional update of the tbbmalloc (oneTBB src.v2021.10.0 msvc_19.29_cxx_64_md_release)
 
 This folder contains:
 
-- SeaMM.dll lock-free scalable allocator (ver. 2022 102912 bytes)(MD5 8c3eabde5e916ea4aded5e248ceb29de)
+- SeaMM.dll.previous last lock-free scalable allocator (ver. 2022 102912 bytes)(MD5 8c3eabde5e916ea4aded5e248ceb29de)
+  - updated SeaMM.dll (ver. 2023 106496 bytes)(MD5 4363d696fbd2395529dee46607c06205)
 - SeaRTL.dll simd enabled rtl subset routines (ver. 2022 201728 bytes)(MD5 b7fe56a81870b13b466816fe4e268d78)
 - SeaZIP.dll accelerated zlib compression (ver. 2023 978944 bytes)(MD5 c916569b4e8e974d226c898164675989) 
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
