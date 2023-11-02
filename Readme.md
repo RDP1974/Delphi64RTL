@@ -10,8 +10,7 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 
 This folder contains:
 
-- SeaMM.dll.previous lock-free scalable allocator (ver. 2022 102912 bytes)(MD5 8c3eabde5e916ea4aded5e248ceb29de)
-  - updated SeaMM.dll (ver. 2023 106496 bytes)(MD5 4363d696fbd2395529dee46607c06205)
+- SeaMM.dll (ver. 2023 106496 bytes)(MD5 4363d696fbd2395529dee46607c06205)
 - SeaRTL.dll simd enabled rtl subset routines (ver. 2022 201728 bytes)(MD5 b7fe56a81870b13b466816fe4e268d78)
 - SeaZIP.dll accelerated zlib compression (ver. 2023 978944 bytes)(MD5 c916569b4e8e974d226c898164675989) 
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
