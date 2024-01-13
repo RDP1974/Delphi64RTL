@@ -15,20 +15,20 @@ This folder contains:
 - SeaZIP.dll accelerated zlib compression (ver. 2023 978944 bytes)(MD5 c916569b4e8e974d226c898164675989) 
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
 - RDPSimd64.pas wrapper for simd rtl
-- RDPZlib64.pas wrapper for zlib deflate (level -2 AC mode in deflate call should be used over UTF-8 streams for web optimization, if you need to compress binary contents use level from 1 to 9 to avoid exceptions)<br>
+- RDPZlib64.pas wrapper for zlib deflate (level -2 AC mode in deflate call should be used over UTF-8 strings for web optimization, if you need to compress binary contents use level from 1 to 9 to avoid exceptions)<br>
 - RDPWebBroker64.pas utils to enhance webbroker web apps<br> 
 - SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)(will update it with a small project built over this extension)
 - License.txt for legal terms
 
 A test with Indy, the built-in TCP Delphi library, on I7 cpu, show an enhancement from 6934.29 ops/sec to 23097.68 ops/sec
 
-Another test with WebBroker http compression, on I7 cpu, show an enhancement from 147 pages/sec to 722 pages/sec
+Another test with Webbroker http compression, on I7 cpu, show an enhancement from 147 pages/sec to 722 pages/sec
 
 Another test with DMVC web api, on I9 cpu and windows 2016, simulating with apachebench 10000 requests and 100 users, show an enhancement from 111 reqs/sec to 6448 reqs/sec
 
-Another test, a ISAPI, on I9 cpu and windows 2016, doing in sequence DB query -> dataset of 1500 lines x 10 rows -> serialize to json string -> shrink it with deflate, is populating 2000 http reqs/sec, correctly filling all the cpu cores
+Another test, an ISAPI, on I9 cpu and windows 2016, doing in sequence DB query -> dataset of 1500 lines x 10 rows -> serialize to json string -> shrink it with deflate, is populating 2000 http reqs/sec, correctly filling whole cpu cores
 
-Another WebBroker http app (Delphi 11) jump from 542 reqs/s to 3364 reqs/s (i9 cpu hyper-v windows 2022 server)(libs ver. 2022)
+Another Webbroker http app (Delphi 11) jump from 542 reqs/s to 3364 reqs/s (i9 cpu hyper-v windows 2022 server)(libs ver. 2022)
 
 A simple web api console test with Horse (Delphi 12) jump from 2200 reqs/s to 37000 reqs/s (i9 cpu hyper-v windows 2022 server)(libs ver. 2023)
 
@@ -40,7 +40,7 @@ If you want enable accelerated zlib programmatically into your WebBroker app, ju
 - end;
 
 The library is well tested, run on Intel and Amd x64 Windows, if you found any trouble please notify me;<br>
-big thanks to the Delphi community and its great coders<br>
+big thanks to the Delphi community and its great coders, in particular for the support received to Bruno Fierens (TMS), Daniele Teti (Bittime), Arnaud Bouchez (Synopse)<br>
 
 Contact me: roberto dot dellapasqua at live.com
 
