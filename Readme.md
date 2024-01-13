@@ -24,9 +24,9 @@ A test with Indy, the built-in TCP Delphi library, on I7 cpu, show an enhancemen
 
 Another test with Webbroker http compression, on I7 cpu, show an enhancement from 147 pages/sec to 722 pages/sec
 
-Another test with DMVC web api, on I9 cpu and windows 2016, simulating with apachebench 10000 requests and 100 users, show an enhancement from 111 reqs/sec to 6448 reqs/sec
+Another test with Dmvc web api, on I9 cpu and windows 2016, simulating with apachebench 10000 requests and 100 users, show an enhancement from 111 reqs/sec to 6448 reqs/sec
 
-Another test, an ISAPI, on I9 cpu and windows 2016, doing in sequence DB query -> dataset of 1500 lines x 10 rows -> serialize to json string -> shrink it with deflate, is populating 2000 http reqs/sec, correctly filling whole cpu cores
+Another test, an Isapi, on I9 cpu and windows 2016, doing in sequence DB query -> dataset of 1500 lines x 10 rows -> serialize to json string -> shrink it with deflate, is populating 2000 http reqs/sec, correctly filling whole cpu cores
 
 Another Webbroker http app (Delphi 11) jump from 542 reqs/s to 3364 reqs/s (i9 cpu hyper-v windows 2022 server)(libs ver. 2022)
 
