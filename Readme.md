@@ -26,11 +26,11 @@ Another test with Webbroker http compression, on I7 cpu, show an enhancement fro
 
 Another test with Dmvc web api, on I9 cpu and windows 2016, simulating with apachebench 10000 requests and 100 users, show an enhancement from 111 reqs/sec to 6448 reqs/sec
 
-Another test, an Isapi, on I9 cpu and windows 2016, doing in sequence DB query -> dataset of 1500 lines x 10 rows -> serialize to json string -> shrink it with deflate, is populating 2000 http reqs/sec, correctly filling whole cpu cores
+Another test, an Isapi, on I9 cpu and windows 2016, doing in sequence DB query -> dataset of 1500 lines x 10 rows -> serialize to json string -> shrink it with deflate, populates 2000 http reqs/sec, correctly filling all cpu cores
 
 Another Webbroker http app (Delphi 11) jump from 542 reqs/s to 3364 reqs/s (i9 cpu hyper-v windows 2022 server)(libs ver. 2022)
 
-A simple web api console test with Horse (Delphi 12) jump from 2200 reqs/s to 37000 reqs/s (i9 cpu hyper-v windows 2022 server)(libs ver. 2023)
+A simple Horse web api app (Delphi 12) jump from 2200 reqs/s to 37 thousands reqs/s (i9 cpu hyper-v windows 2022 server)(libs ver. 2023)
 
 If you want enable accelerated zlib programmatically into your WebBroker app, just add one line of code in afterdispatch event:
 
