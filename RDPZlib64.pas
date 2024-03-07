@@ -3,6 +3,7 @@ unit RDPZlib64;
 // 28 febr 2019 Roberto Della Pasqua www.dellapasqua.com
 // 3 march 2020 added inflate support
 // 10 jan 2023 updated to zlib 1.2.13 Intel IPP latest version
+// 7 mar 2024 small refactor about buffer size (ideally should be dynamic)
 
 interface
 
@@ -12,7 +13,7 @@ uses
 const
   ZLIBDLL = 'SeaZIP.dll';
   ZLIB_VERSION: PAnsiChar = '1.2.13';
-  ZLIB_VERNUM = $12d0;
+  ZLIB_VERNUM = $12D0;
   Z_FINISH = 4;
   Z_NO_FLUSH = 0;
   Z_OK = 0;
@@ -85,15 +86,12 @@ begin
   FillChar(zstream, SizeOf(z_stream), 0);
   DestSize := SrcSize; // in the worse case dest len is equal at source len
   GetMem(Dest, DestSize);
-
   try
     zstream.next_in := Src;
     zstream.avail_in := SrcSize;
     zstream.next_out := Dest;
     zstream.avail_out := DestSize;
-
     zInit := DeflateInit2(zstream, Level, Z_DEFLATED, Z_MAX_WBITS, Z_MEM_LEVEL, Z_DEFAULT_STRATEGY, ZLIB_VERSION, SizeOf(z_stream));
-
     if zInit > Z_ERRNO then
     begin
       zDeflate := Deflate(zstream, Z_FINISH);
@@ -102,14 +100,11 @@ begin
     end
     else
       raise EZCompressionError.Create(Z_errmsg[2 - zInit]);
-
     zDeflate := DeflateEnd(zstream);
     if zDeflate < Z_OK then
       raise EZCompressionError.Create(Z_errmsg[2 - zDeflate]);
-
     ReallocMem(Dest, zstream.total_out);
     DestSize := zstream.total_out;
-
   except
     FreeMem(Dest);
     raise;
@@ -118,7 +113,7 @@ end;
 
 class procedure SeaZlib.Decompress(const Src: Pointer; out Dest: Pointer; SrcSize: Integer; out DestSize: Integer);
 const
-  BufferLen = 131070;
+  BufferLen = 65536;
 var
   zstream: z_stream;
   zInit, zInflate: Integer;
@@ -126,21 +121,17 @@ begin
   FillChar(zstream, SizeOf(z_stream), 0);
   DestSize := SrcSize * 3;
   GetMem(Dest, DestSize);
-
   try
     zstream.next_in := Src;
     zstream.avail_in := SrcSize;
     zstream.next_out := Dest;
     zstream.avail_out := DestSize;
-
     zInit := InflateInit2(zstream, Z_MAX_WBITS, ZLIB_VERSION, SizeOf(z_stream));
     if zInit > Z_ERRNO then
     begin
-
       zInflate := Inflate(zstream, Z_NO_FLUSH);
       if zInflate < Z_OK then
         raise EZCompressionError.Create(Z_errmsg[2 - zInflate]);
-
       while zInflate <> Z_STREAM_END do
       begin
         Inc(DestSize, BufferLen);
@@ -150,22 +141,17 @@ begin
         zInflate := Inflate(zstream, Z_NO_FLUSH);
         if zInflate < Z_OK then
           raise EZCompressionError.Create(Z_errmsg[2 - zInflate]);
-
       end;
-
       if (zInflate <> Z_STREAM_END) and (zInflate <> Z_BUF_ERROR) then
         raise EZCompressionError.Create(Z_errmsg[2 - zInflate]);
     end
     else
       raise EZCompressionError.Create(Z_errmsg[2 - zInit]);
-
     zInflate := InflateEnd(zstream);
     if zInflate < Z_OK then
       raise EZCompressionError.Create(Z_errmsg[2 - zInflate]);
-
     ReallocMem(Dest, zstream.total_out);
     DestSize := zstream.total_out;
-
   except
     FreeMem(Dest);
     raise;
@@ -180,30 +166,24 @@ begin
   FillChar(zstream, SizeOf(z_stream), 0);
   SetLength(Dest, Length(Src));
   // in the worse case dest len is equal at source len
-
   try
     zstream.next_in := @Src[0];
     zstream.avail_in := Length(Src);
     zstream.next_out := @Dest[0];
     zstream.avail_out := Length(Dest);
     zInit := DeflateInit2(zstream, Level, Z_DEFLATED, Z_MAX_WBITS, Z_MEM_LEVEL, Z_DEFAULT_STRATEGY, ZLIB_VERSION, SizeOf(z_stream));
-
     if zInit > Z_ERRNO then
     begin
       zDeflate := Deflate(zstream, Z_FINISH);
       if ((zDeflate <> Z_STREAM_END) and (zDeflate <> Z_BUF_ERROR)) or (zDeflate < Z_OK) then
         raise EZCompressionError.Create(Z_errmsg[2 - zDeflate]);
-
     end
     else
       raise EZCompressionError.Create(Z_errmsg[2 - zInit]);
-
     zDeflate := DeflateEnd(zstream);
     if zDeflate < Z_OK then
       raise EZCompressionError.Create(Z_errmsg[2 - zDeflate]);
-
     SetLength(Dest, zstream.total_out);
-
   except
     SetLength(Dest, 0);
     raise;
@@ -212,27 +192,24 @@ end;
 
 class procedure SeaZlib.Decompress(const Src: TBytes; out Dest: TBytes);
 const
-  BufferLen = 131070;
+  BufferLen = 65536;
 var
   zstream: z_stream;
   zInit, zInflate: Integer;
 begin
   FillChar(zstream, SizeOf(z_stream), 0);
   SetLength(Dest, Length(Src) * 3);
-
   try
     zstream.next_in := @Src[0];
     zstream.avail_in := Length(Src);
     zstream.next_out := @Dest[0];
     zstream.avail_out := Length(Dest);
     zInit := InflateInit2(zstream, Z_MAX_WBITS, ZLIB_VERSION, SizeOf(z_stream));
-
     if zInit > Z_ERRNO then
     begin
       zInflate := Inflate(zstream, Z_NO_FLUSH);
       if zInflate < Z_OK then
         raise EZCompressionError.Create(Z_errmsg[2 - zInflate]);
-
       while zInflate <> Z_STREAM_END do
       begin
         SetLength(Dest, Length(Dest) + BufferLen);
@@ -241,21 +218,16 @@ begin
         zInflate := Inflate(zstream, Z_NO_FLUSH);
         if zInflate < Z_OK then
           raise EZCompressionError.Create(Z_errmsg[2 - zInflate]);
-
       end;
-
       if (zInflate <> Z_STREAM_END) and (zInflate <> Z_BUF_ERROR) then
         raise EZCompressionError.Create(Z_errmsg[2 - zInflate]);
     end
     else
       raise EZCompressionError.Create(Z_errmsg[2 - zInit]);
-
     zInflate := InflateEnd(zstream);
     if zInflate < Z_OK then
       raise EZCompressionError.Create(Z_errmsg[2 - zInflate]);
-
     SetLength(Dest, zstream.total_out);
-
   except
     SetLength(Dest, 0);
     raise;
@@ -264,36 +236,31 @@ end;
 
 class procedure SeaZlib.CompressStream(Src: TStream; Dest: TStream; Level: Integer = Z_BEST_SPEED_AC);
 const
-  BufferLen = 131070;
+  BufferLen = 65536;
 var
   zstream: z_stream;
   zInit, zDeflate: Integer;
   InBuff, OutBuff: Pointer;
   InBuffSize, OutBuffSize: Integer;
-
 begin
   FillChar(zstream, SizeOf(z_stream), 0);
   GetMem(InBuff, BufferLen);
   GetMem(OutBuff, BufferLen);
-
   try
     zInit := DeflateInit2(zstream, Level, Z_DEFLATED, Z_MAX_WBITS, Z_MEM_LEVEL, Z_DEFAULT_STRATEGY, ZLIB_VERSION, SizeOf(z_stream));
     if zInit > Z_ERRNO then
     begin
-
       InBuffSize := Src.Read(InBuff^, BufferLen);
       while InBuffSize > 0 do
       begin
         zstream.next_in := InBuff;
         zstream.avail_in := InBuffSize;
-
         repeat
           zstream.next_out := OutBuff;
           zstream.avail_out := BufferLen;
           zDeflate := Deflate(zstream, Z_NO_FLUSH);
           if zDeflate < Z_OK then
             raise EZCompressionError.Create(Z_errmsg[2 - zDeflate]);
-
           OutBuffSize := BufferLen - zstream.avail_out;
           if OutBuffSize > 0 then
             Dest.Write(OutBuff^, OutBuffSize)
@@ -302,26 +269,22 @@ begin
         until (zstream.avail_in = 0) and (zstream.avail_out > 0);
         InBuffSize := Src.Read(InBuff^, BufferLen);
       end;
-
       repeat
         zstream.next_out := OutBuff;
         zstream.avail_out := BufferLen;
         zDeflate := Deflate(zstream, Z_FINISH);
         if zDeflate < Z_OK then
           raise EZCompressionError.Create(Z_errmsg[2 - zDeflate]);
-
         OutBuffSize := BufferLen - zstream.avail_out;
         if OutBuffSize > 0 then
           Dest.Write(OutBuff^, OutBuffSize)
         else
           break;
       until (zDeflate = Z_STREAM_END) and (zstream.avail_out > 0);
-
       zDeflate := DeflateEnd(zstream);
       if zDeflate < Z_OK then
         raise EZCompressionError.Create(Z_errmsg[2 - zDeflate]);
     end;
-
   finally
     FreeMem(InBuff);
     FreeMem(OutBuff);
@@ -330,36 +293,31 @@ end;
 
 class procedure SeaZlib.DecompressStream(Src: TStream; Dest: TStream);
 const
-  BufferLen = 131070;
+  BufferLen = 65536;
 var
   zstream: z_stream;
   zInit, zInflate: Integer;
   InBuff, OutBuff: Pointer;
   InBuffSize, OutBuffSize: Integer;
-
 begin
   FillChar(zstream, SizeOf(z_stream), 0);
   GetMem(InBuff, BufferLen);
   GetMem(OutBuff, BufferLen);
-
   try
     zInit := InflateInit2(zstream, Z_MAX_WBITS, ZLIB_VERSION, SizeOf(z_stream));
     if zInit > Z_ERRNO then
     begin
-
       InBuffSize := Src.Read(InBuff^, BufferLen);
       while InBuffSize > 0 do
       begin
         zstream.next_in := InBuff;
         zstream.avail_in := InBuffSize;
-
         repeat
           zstream.next_out := OutBuff;
           zstream.avail_out := BufferLen;
           zInflate := Inflate(zstream, Z_NO_FLUSH);
           if zInflate < Z_OK then
             raise EZCompressionError.Create(Z_errmsg[2 - zInflate]);
-
           OutBuffSize := BufferLen - zstream.avail_out;
           if OutBuffSize > 0 then
             Dest.Write(OutBuff^, OutBuffSize)
@@ -368,31 +326,26 @@ begin
         until (zstream.avail_in = 0) and (zstream.avail_out > 0);
         InBuffSize := Src.Read(InBuff^, BufferLen);
       end;
-
       repeat
         zstream.next_out := OutBuff;
         zstream.avail_out := BufferLen;
         zInflate := Inflate(zstream, Z_FINISH);
         if zInflate < Z_OK then
           raise EZCompressionError.Create(Z_errmsg[2 - zInflate]);
-
         OutBuffSize := BufferLen - zstream.avail_out;
         if OutBuffSize > 0 then
           Dest.Write(OutBuff^, OutBuffSize)
         else
           break;
       until (zInflate = Z_STREAM_END) and (zstream.avail_out > 0);
-
       zInflate := InflateEnd(zstream);
       if zInflate < Z_OK then
         raise EZCompressionError.Create(Z_errmsg[2 - zInflate]);
     end;
-
   finally
     FreeMem(InBuff);
     FreeMem(OutBuff);
   end;
-
 end;
 
 end.
