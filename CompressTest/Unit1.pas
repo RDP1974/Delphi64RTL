@@ -1,5 +1,9 @@
 unit Unit1;
 
+// 12 mar 2024
+// by default the library is using Z_BEST_SPEED_AC (-2) for text buffers (eg. for http json deflate)
+// for other kind of files you should use from (1) Z_BEST_SPEED to (9) Z_BEST_COMPRESSION
+
 interface
 
 uses
