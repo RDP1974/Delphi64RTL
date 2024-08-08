@@ -20,11 +20,23 @@ This folder contains:
 - RDPWebBroker64.pas utils to enhance webbroker web apps<br> 
 - SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)(will update it with a small project built over this extension?)
 - License.txt for legal terms
-
+<br>
 <p align="center"><img src="RobiMM.gif" width="50%"></p>
 A common rest library tested with apachebench and 100 concurrents users (vm windows 2022 intel 9900k)<br>
 I bet we can obtain the highest position on techempower!<br>
+<br>
+About zlib IPP accelerated:<br>
+You can use symbolic name Z_IPP_FAST_COMPRESSION, which is equal to -2:
 
+    deflateInit(&deflate_stream, Z_IPP_FAST_COMPRESSION);
+Introduced new sub-ranges of compression levels from 11 to 29
+
+The standard levels 1..9 are compatible with original Zlib
+
+Levels 11..19 are similar to 1..9, but fit better when compressing large files (more than 1 MB)
+
+Levels 21..29 are for highly compressible files with compression ratio equal to 30x and higher.
+<br><br>
 A test with Indy, the built-in TCP Delphi library, on I7 cpu, show an enhancement from 6934.29 ops/sec to 23097.68 ops/sec
 
 Another test with Webbroker http compression, on I7 cpu, show an enhancement from 147 pages/sec to 722 pages/sec
