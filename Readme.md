@@ -23,12 +23,11 @@ This folder contains:
 <br>
 <p align="center"><img src="RobiMM.gif" width="50%"></p>
 A common rest library tested with apachebench and 100 concurrents users (vm windows 2022 intel 9900k)<br>
-I bet we can obtain the highest position on techempower!<br>
+I bet we can obtain the highest rank on techempower!<br>
 <br>
 About zlib IPP accelerated:<br>
 You can use symbolic name Z_IPP_FAST_COMPRESSION, which is equal to -2:
-
-    deflateInit(&deflate_stream, Z_IPP_FAST_COMPRESSION);
+    
 Introduced new sub-ranges of compression levels from 11 to 29
 
 The standard levels 1..9 are compatible with original Zlib
@@ -37,18 +36,6 @@ Levels 11..19 are similar to 1..9, but fit better when compressing large files (
 
 Levels 21..29 are for highly compressible files with compression ratio equal to 30x and higher.
 <br><br>
-A test with Indy, the built-in TCP Delphi library, on I7 cpu, show an enhancement from 6934.29 ops/sec to 23097.68 ops/sec
-
-Another test with Webbroker http compression, on I7 cpu, show an enhancement from 147 pages/sec to 722 pages/sec
-
-Another test with Dmvc web api, on I9 cpu and windows 2016, simulating with apachebench 10000 requests and 100 users, show an enhancement from 111 reqs/sec to 6448 reqs/sec
-
-Another test, an Isapi, on I9 cpu and windows 2016, doing in sequence DB query -> dataset of 1500 lines x 10 rows -> serialize to json string -> shrink it with deflate, populates 2000 http reqs/sec, correctly filling all cpu cores
-
-Another Webbroker http app (Delphi 11) jump from 542 reqs/s to 3364 reqs/s (i9 cpu hyper-v windows 2022 server)(libs ver. 2022)
-
-A simple Horse web api app (Delphi 12) jump from 2200 reqs/s to 37 thousand reqs/s (i9 cpu hyper-v windows 2022 server)(libs ver. 2023)
-
 If you want enable accelerated zlib programmatically into your WebBroker app, just add one line of code in afterdispatch event:
 
 - procedure TWebModule.WebModuleAfterDispatch(Sender: TObject; Request: TWebRequest; Response: TWebResponse; var Handled: Boolean); 
@@ -57,7 +44,7 @@ If you want enable accelerated zlib programmatically into your WebBroker app, ju
 - end;
 
 The library is well tested, run on Intel and Amd x64 Windows, if you found any trouble please notify me;<br>
-big thanks to the Delphi community and its great coders, in particular for the support received from Bruno Fierens (TMS), Daniele Teti (Bittime), Arnaud Bouchez (Synopse)<br>
+big thanks to the Delphi community and its great coders, in particular for the support received from Bruno Fierens (TMS), Daniele Teti (Bittime) and many others<br>
 
 Contact me: roberto dot dellapasqua at live.com
 
