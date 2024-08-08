@@ -21,9 +21,9 @@ This folder contains:
 - SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)(will update it with a small project built over this extension?)
 - License.txt for legal terms
 
-<img src="RobiMM.gif" width="50%">
+<p align="center"><img src="RobiMM.gif" width="50%"></p>
 A common rest library tested with apachebench and 100 concurrents users (vm windows 2022 intel 9900k)
-I bet we can beat the best position on techempower!
+I bet we can obtain the highest position on techempower!
 
 A test with Indy, the built-in TCP Delphi library, on I7 cpu, show an enhancement from 6934.29 ops/sec to 23097.68 ops/sec
 
