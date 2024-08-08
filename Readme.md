@@ -29,7 +29,7 @@ About zlib IPP accelerated: you can use symbolic name Z_IPP_FAST_COMPRESSION whi
 Introduced new sub-ranges of compression levels from 11 to 29<br>
 The standard levels 1..9 are compatible with original Zlib<br>
 Levels 11..19 are similar to 1..9, but fit better when compressing large files (more than 1 MB)<br>
-Levels 21..29 are for highly compressible files with compression ratio equal to 30x and higher.
+Levels 21..29 are for highly compressible files with compression ratio equal to 30x and higher
 <br><br>
 If you want enable accelerated zlib programmatically into your WebBroker app, just add one line of code in afterdispatch event:
 
