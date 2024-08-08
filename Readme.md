@@ -16,9 +16,9 @@ This folder contains:
 - SeaZIP.dll accelerated zlib compression (md5 5c4409f5c93f490119134bb5477a89fb size 982016)
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
 - RDPSimd64.pas wrapper for simd rtl
-- RDPZlib64.pas wrapper for zlib deflate (level -2 AC mode in deflate call should be used over UTF-8 strings for web optimization, if you need to compress binary contents use level from 1 to 9 to avoid exceptions)<br>
+- RDPZlib64.pas wrapper for zlib deflate (level -2 AC mode in deflate call should be used over UTF-8 strings for web optimization)<br>
 - RDPWebBroker64.pas utils to enhance webbroker web apps<br> 
-- SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)(will update it with a small project built over this extension?)
+- SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)
 - License.txt for legal terms
 <br>
 <p align="center"><img src="RobiMM.gif" width="50%"></p>
