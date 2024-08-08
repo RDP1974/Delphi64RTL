@@ -11,15 +11,18 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 
 This folder contains:
 
-- SeaMM.dll (ver. 2023 106496 bytes)(MD5 4363d696fbd2395529dee46607c06205)
+- SeaMM.dll (md5 70f6767ffabf3a68c3886c04ce012d39 size 106496)
 - SeaRTL.dll simd enabled rtl subset routines (md5 6f35648fbf2b386e3129ec82bb12d30d size 200704)
 - SeaZIP.dll accelerated zlib compression (md5 5c4409f5c93f490119134bb5477a89fb size 982016)
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
 - RDPSimd64.pas wrapper for simd rtl
 - RDPZlib64.pas wrapper for zlib deflate (level -2 AC mode in deflate call should be used over UTF-8 strings for web optimization, if you need to compress binary contents use level from 1 to 9 to avoid exceptions)<br>
 - RDPWebBroker64.pas utils to enhance webbroker web apps<br> 
-- SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)(will update it with a small project built over this extension)
+- SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)(will update it with a small project built over this extension?)
 - License.txt for legal terms
+
+<img src="RobiMM.gif">
+A common rest library tested with apachebench with 100 concurrents users on windows 2022 with I9 9900F cpu
 
 A test with Indy, the built-in TCP Delphi library, on I7 cpu, show an enhancement from 6934.29 ops/sec to 23097.68 ops/sec
 
