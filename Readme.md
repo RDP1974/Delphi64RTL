@@ -7,12 +7,13 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 10 January 2023 updated zlib to 1.2.13 with latest Intel IPP ver. 2021.7<br>
 20 February 2023 updated webbroker deflate helper for reliability<br>
 02 November 2023 updated oneTBB allocator<br>(oneTBB src.v2021.12.0 msvc_19.29_cxx_64_md_release)<br>(https://github.com/oneapi-src/oneTBB)
+8 August 2024 updated to intel ipp v2021.12, zlib v1.3.1, visual c++ v19.29.30154
 
 This folder contains:
 
 - SeaMM.dll (ver. 2023 106496 bytes)(MD5 4363d696fbd2395529dee46607c06205)
-- SeaRTL.dll simd enabled rtl subset routines (ver. 2022 201728 bytes)(MD5 b7fe56a81870b13b466816fe4e268d78)
-- SeaZIP.dll accelerated zlib compression (ver. 2023 978944 bytes)(MD5 c916569b4e8e974d226c898164675989) 
+- SeaRTL.dll simd enabled rtl subset routines (md5 6f35648fbf2b386e3129ec82bb12d30d size 200704)
+- SeaZIP.dll accelerated zlib compression (md5 5c4409f5c93f490119134bb5477a89fb size 982016)
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
 - RDPSimd64.pas wrapper for simd rtl
 - RDPZlib64.pas wrapper for zlib deflate (level -2 AC mode in deflate call should be used over UTF-8 strings for web optimization, if you need to compress binary contents use level from 1 to 9 to avoid exceptions)<br>
