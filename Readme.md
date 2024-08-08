@@ -15,7 +15,7 @@ This folder contains:
 - SeaRTL.dll simd enabled rtl subset routines (md5 6f35648fbf2b386e3129ec82bb12d30d size 200704)
 - SeaZIP.dll accelerated zlib compression (md5 5c4409f5c93f490119134bb5477a89fb size 982016)
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
-- RDPSimd64.pas wrapper for simd rtl
+- RDPSimd64.pas wrapper for simd RTL api
 - RDPZlib64.pas wrapper for zlib deflate (level -2 AC mode in deflate call should be used over UTF-8 strings for web optimization)<br>
 - RDPWebBroker64.pas utils to enhance webbroker web apps<br> 
 - SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)
