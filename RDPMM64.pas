@@ -1,6 +1,9 @@
 unit RDPMM64;
 
 // 22 Febr 2019 Roberto Della Pasqua www.dellapasqua.com
+// memory manager replacement with Intel ipp libraries
+// 8 ago 2024 updated to intel ipp v2021.13, visual c++ v19.29.30154
+// seamm.dll md5 70f6767ffabf3a68c3886c04ce012d39 size 106496
 
 interface
 

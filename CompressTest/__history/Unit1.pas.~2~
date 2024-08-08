@@ -63,15 +63,15 @@ ShowMessage(IntToStr(Length(E1)));
 T2:= TMemoryStream.Create;
 T.Seek(0,0);
 SeaZlib.CompressStream(T,T2);
-T2.SaveToFile('C:\temp\Chrome.saved');
+T2.SaveToFile('C:\Chrome.saved');
 T.Free;
 T2.Free;
 
 T:=TMemoryStream.Create;
-T.LoadFromFile('C:\temp\Chrome.saved');
+T.LoadFromFile('C:\Chrome.saved');
 T2:= TMemoryStream.Create;
 SeaZlib.DecompressStream(T,T2);
-T2.SaveToFile('C:\temp\Chrome.orig');
+T2.SaveToFile('C:\Chrome.orig');
 ShowMessage(IntToStr(T2.Size));
 
 T.Free;

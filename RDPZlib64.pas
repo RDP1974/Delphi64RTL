@@ -1,9 +1,14 @@
 unit RDPZlib64;
 
 // 28 febr 2019 Roberto Della Pasqua www.dellapasqua.com
+// zlib library enhanced with Intel IPP performance libraries
 // 3 march 2020 added inflate support
 // 10 jan 2023 updated to zlib 1.2.13 Intel IPP latest version
 // 7 mar 2024 small refactor about buffer size (ideally should be dynamic)
+// 8 ago 2024 updated to zlib v1.3.1, intel ipp v2021.12, visual c++ v19.29.30154
+// solved random av on z77 files
+// please check github repo for zlib options, consider using -2 only with utf8 buffers
+// seazip.dll md5 5c4409f5c93f490119134bb5477a89fb size 982016
 
 interface
 
@@ -12,8 +17,8 @@ uses
 
 const
   ZLIBDLL = 'SeaZIP.dll';
-  ZLIB_VERSION: PAnsiChar = '1.2.13';
-  ZLIB_VERNUM = $12D0;
+  ZLIB_VERSION: PAnsiChar = '1.3.1';
+  ZLIB_VERNUM = $1310;
   Z_FINISH = 4;
   Z_NO_FLUSH = 0;
   Z_OK = 0;
@@ -113,7 +118,7 @@ end;
 
 class procedure SeaZlib.Decompress(const Src: Pointer; out Dest: Pointer; SrcSize: Integer; out DestSize: Integer);
 const
-  BufferLen = 65536;
+  BufferLen = 131072;
 var
   zstream: z_stream;
   zInit, zInflate: Integer;
@@ -192,7 +197,7 @@ end;
 
 class procedure SeaZlib.Decompress(const Src: TBytes; out Dest: TBytes);
 const
-  BufferLen = 65536;
+  BufferLen = 131072;
 var
   zstream: z_stream;
   zInit, zInflate: Integer;
@@ -236,7 +241,7 @@ end;
 
 class procedure SeaZlib.CompressStream(Src: TStream; Dest: TStream; Level: Integer = Z_BEST_SPEED_AC);
 const
-  BufferLen = 65536;
+  BufferLen = 131072;
 var
   zstream: z_stream;
   zInit, zDeflate: Integer;
@@ -293,7 +298,7 @@ end;
 
 class procedure SeaZlib.DecompressStream(Src: TStream; Dest: TStream);
 const
-  BufferLen = 65536;
+  BufferLen = 131072;
 var
   zstream: z_stream;
   zInit, zInflate: Integer;

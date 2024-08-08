@@ -1,6 +1,9 @@
 unit RDPSimd64;
 
-// 22 Febr 2019 Roberto Della Pasqua www.dellapasqua.com
+// 22 febr 2019 Roberto Della Pasqua www.dellapasqua.com
+// rtl api patches with Intel IPP performance libraries
+// 8 ago 2024 updated to intel ipp v2021.12, visual c++ v19.29.30154
+// seartl.dll md5 6f35648fbf2b386e3129ec82bb12d30d size 200704
 
 interface
 

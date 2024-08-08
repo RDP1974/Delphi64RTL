@@ -1,10 +1,10 @@
 unit RDPWebBroker64;
 
-// 28 Febr 2019 Roberto Della Pasqua www.dellapasqua.com
+// 28 febr 2019 Roberto Della Pasqua www.dellapasqua.com
 // for better performances put RDPMM64 as first unit clause in project source
-// define SEAZLIB for compression realtime speed up
-// 26 Febr 2020 buffer len check
-// 20 Febr 2023 updated zlibdeflate for correct mime
+// define SEAZLIB for deflate with intel ipp performance libraries
+// 26 febr 2020 buffer len check
+// 20 febr 2023 updated zlibdeflate for correct mime
 // be careful to set the correct content-type with utf-8 charset
 
 {$DEFINE SEAZLIB}
@@ -17,7 +17,6 @@ type
   TWBHelper = class helper for TWebResponse
   public
     procedure ZlibDeflate; overload;
- //   procedure ZlibDeflate(const Src: TMemoryStream); overload;
   end;
 
 implementation
@@ -59,20 +58,5 @@ begin
     end;
   end;
 end;
-
-//procedure TWBHelper.ZlibDeflate(const Src: TMemoryStream);
-//var
-//  Helper: TMemoryStream;
-//begin
-//  if (Src.Size > 1500) and (Src.Size < 10000000) then // 10MB
-//  begin
-//    Src.Seek(0, 0);
-//    Helper := TMemoryStream.Create;
-//    SeaZlib.CompressStream(Src, Helper, Z_BEST_SPEED_AC);
-//    ContentStream := Helper;
-//    ContentEncoding := 'deflate';
-//    ContentLength := Helper.Size;
-//  end;
-//end;
 
 end.

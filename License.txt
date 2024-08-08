@@ -1,8 +1,8 @@
-Please check the products license, now (August 2022) completely free to deploy and distribute
+Please check the products license, now (August 2024) completely free to deploy and distribute
 https://www.intel.com/content/www/us/en/developer/tools/oneapi/ipp.html
 https://www.intel.com/content/www/us/en/developer/tools/oneapi/onetbb.html
 
-Copyright (c) 2022 Roberto Della Pasqua
+Copyright (c) 2024 Roberto Della Pasqua
 Use and Redistribution.  You may use and redistribute the software (the “Software”) libraries, without modification, provided the following conditions are met:
 * No redistributions of source code permitted without author permission.
 * No reverse engineering, decompilation, or disassembly of this Software is permitted.

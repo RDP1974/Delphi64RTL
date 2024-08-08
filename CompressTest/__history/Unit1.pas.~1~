@@ -3,7 +3,6 @@ unit Unit1;
 // 12 mar 2024
 // by default the library is using Z_BEST_SPEED_AC (-2) for text buffers (eg. for http json deflate)
 // for other kind of files you should use from (1) Z_BEST_SPEED to (9) Z_BEST_COMPRESSION
-// 8 ago 2024 please check github repo for zlib options
 
 interface
 
@@ -63,15 +62,15 @@ ShowMessage(IntToStr(Length(E1)));
 T2:= TMemoryStream.Create;
 T.Seek(0,0);
 SeaZlib.CompressStream(T,T2);
-T2.SaveToFile('C:\temp\Chrome.saved');
+T2.SaveToFile('C:\Chrome.saved');
 T.Free;
 T2.Free;
 
 T:=TMemoryStream.Create;
-T.LoadFromFile('C:\temp\Chrome.saved');
+T.LoadFromFile('C:\Chrome.saved');
 T2:= TMemoryStream.Create;
 SeaZlib.DecompressStream(T,T2);
-T2.SaveToFile('C:\temp\Chrome.orig');
+T2.SaveToFile('C:\Chrome.orig');
 ShowMessage(IntToStr(T2.Size));
 
 T.Free;
