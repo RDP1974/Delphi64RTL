@@ -6,7 +6,7 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 24 August 2022 DLL built with the latest stable Intel oneAPI and TBB ver. 2021.6<br>
 10 January 2023 updated zlib to 1.2.13 with latest Intel IPP ver. 2021.7<br>
 20 February 2023 updated webbroker deflate helper for reliability<br>
-02 November 2023 updated oneTBB allocator<br>(oneTBB src.v2021.12.0 msvc_19.29_cxx_64_md_release)(https://github.com/oneapi-src/oneTBB)<br>
+02 November 2023 updated oneTBB allocator (oneTBB src.v2021.12.0 msvc_19.29_cxx_64_md_release)
 8 August 2024 updated to intel ipp v2021.13, zlib v1.3.1, visual c++ v19.29.30154
 
 This folder contains:
