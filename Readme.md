@@ -23,7 +23,7 @@ This folder contains:
 <br>
 <p align="center"><img src="RobiMM.gif" width="50%"></p>
 A common rest library tested with apachebench and 100 concurrents users (vm windows 2022 intel 9900k)<br>
-I bet we can obtain the highest rank on techempower!<br>
+I bet we can obtain the highest position on techempower!<br>
 <br>
 About zlib IPP accelerated:<br>
 You can use symbolic name Z_IPP_FAST_COMPRESSION, which is equal to -2:
