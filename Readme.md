@@ -25,8 +25,7 @@ This folder contains:
 A common Delphi mvc rest library tested with apachebench and 100 concurrent users (vm windows 2022 intel 9900k)<br>
 I bet we can obtain the highest position on techempower!<br>
 <br>
-About zlib IPP accelerated: you can use symbolic name Z_IPP_FAST_COMPRESSION which is equal to -2
-    
+About zlib IPP accelerated: you can use symbolic name Z_IPP_FAST_COMPRESSION which is equal to -2<br>    
 Introduced new sub-ranges of compression levels from 11 to 29
 
 The standard levels 1..9 are compatible with original Zlib
