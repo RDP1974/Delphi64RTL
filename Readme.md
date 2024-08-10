@@ -7,7 +7,7 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 10 January 2023 updated zlib to 1.2.13 with latest Intel IPP ver. 2021.7<br>
 20 February 2023 updated webbroker deflate helper for reliability<br>
 02 November 2023 updated oneTBB allocator<br>
-8 August 2024 updated to Intel IPP v2021.12, zlib v1.3.1, visual c++ v19.29.30154
+8 August 2024 updated to Intel IPP v2021.12, zlib v1.3.1, visual c++ v19.29.30154<br>
 10 August 2024 removed useless checking in rdpsimd64 move()
 
 This folder contains:
