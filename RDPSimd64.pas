@@ -3,7 +3,6 @@ unit RDPSimd64;
 // 22 febr 2019 Roberto Della Pasqua www.dellapasqua.com
 // rtl api patches with Intel IPP performance libraries
 // 8 ago 2024 updated to intel ipp v2021.12, visual c++ v19.29.30154
-// 10 ago 2024 removed useless checking in move()
 // seartl.dll md5 6f35648fbf2b386e3129ec82bb12d30d size 200704
 
 interface
@@ -68,8 +67,7 @@ end;
 
 procedure Move2(const Source; var Dest; Count: NativeInt); inline;
 begin
-// if Count > 0 then // 10 aug patch useless checking
-    SeaMove(@Source, @Dest, Count);
+if Count > 0 then SeaMove(@Source, @Dest, Count);
 end;
 
 type
