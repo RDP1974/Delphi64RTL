@@ -23,7 +23,7 @@ This folder contains:
 <br>
 <p align="center"><img src="RobiMM.gif" width="50%"></p>
 A common Delphi rest library tested with apachebench and 100 concurrent users (vm windows 2022 intel 9900k)<br>
-(This enhancement is achieved only in highly threaded apps doing concurrent memory and search operations)<br>
+(This enhancement is achieved in highly threaded apps doing concurrent memory and search operations)<br>
 <br>
 About zlib IPP accelerated: you can use symbolic name Z_IPP_FAST_COMPRESSION which is equal to -2<br>    
 Introduced new sub-ranges of compression levels from 11 to 29<br>
