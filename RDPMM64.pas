@@ -2,13 +2,13 @@ unit RDPMM64;
 
 // 22 Febr 2019 Roberto Della Pasqua www.dellapasqua.com
 // memory manager replacement with Intel ipp libraries
-// 8 ago 2024 updated to intel ipp v2021.13, visual c++ v19.29.30154
-// seamm.dll md5 70f6767ffabf3a68c3886c04ce012d39 size 106496
+// 30 oct 2024 updated to intel one api v2022.0, visual c++ v19.41.34123
+// seamm.dll md5 aa2f3a1556c968e03bc8c2d8c1991c95 size 107520
 
 interface
 
 uses
-  RDPSimd64;
+  RDPSimd64; //please check intel oneapi license for library distribution
 
 implementation
 
@@ -26,8 +26,8 @@ end;
 
 function QSEAFreeMem(P: Pointer): Integer; inline;
 begin
-  SeaFreemem(P);
   Result := 0;
+  SeaFreemem(P);
 end;
 
 function QSEAReallocMem(P: Pointer; Size: Nativeint): Pointer; inline;
@@ -69,6 +69,6 @@ initialization
   SetMemoryManager(SEAMemoryManager);
 
 finalization
- SetMemoryManager(OldMemoryManager);
+  SetMemoryManager(OldMemoryManager);
 
 end.
