@@ -8,10 +8,11 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 20 February 2023 updated webbroker deflate helper for reliability<br>
 02 November 2023 updated oneTBB allocator<br>
 8 August 2024 updated to Intel IPP v2021.12, zlib v1.3.1, visual c++ v19.29.30154<br>
+30 oct 2024 updated to Intel one api v2022.0, visual c++ v19.41.34123<br>
 
 This folder contains:
 
-- SeaMM.dll memory manager (md5 70f6767ffabf3a68c3886c04ce012d39 size 106496)
+- SeaMM.dll memory manager (md5 aa2f3a1556c968e03bc8c2d8c1991c95 size 107520)
 - SeaRTL.dll simd enabled rtl subset routines (md5 6f35648fbf2b386e3129ec82bb12d30d size 200704)
 - SeaZIP.dll accelerated zlib compression (md5 5c4409f5c93f490119134bb5477a89fb size 982016)
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
