@@ -40,7 +40,7 @@ If you want enable accelerated zlib programmatically into your WebBroker app, ju
 - end;
 
 The library is well tested, run on Intel and Amd x64 Windows, if you found any trouble please notify me;<br>
-big thanks to the Delphi community and its great coders, in particular for the support received from Bruno Fierens (TMS), Daniele Teti (bittime) and many others.<br>
+big thanks to the Delphi community and its great coders, in particular for the support received from Bruno Fierens (TMS) and Daniele Teti (bittime).<br>
 
 Contact me: roberto dot dellapasqua at live.com
 
