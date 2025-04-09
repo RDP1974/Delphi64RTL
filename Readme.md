@@ -9,6 +9,7 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 02 November 2023 updated oneTBB allocator<br>
 8 August 2024 updated to Intel IPP v2021.12, zlib v1.3.1, visual c++ v19.29.30154<br>
 30 October 2024 updated to Intel IPP v2022.0, visual c++ v19.41.34123<br>
+09 April 2025 rem fillchar and move in case of Delphi 12.x (comes with asm optimized x64 functions)<br>
 
 This folder contains:
 
