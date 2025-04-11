@@ -3,12 +3,15 @@ unit RDPMM64;
 // 22 Febr 2019 Roberto Della Pasqua www.dellapasqua.com
 // memory manager replacement with Intel ipp libraries
 // 30 oct 2024 updated to intel one api v2022.0, visual c++ v19.41.34123
-// seamm.dll md5 aa2f3a1556c968e03bc8c2d8c1991c95 size 107520
+// 11 apr 2025 updated to intel one api v2022.1, visual c++ v19.43.34810
+// seamm.dll md5 df1e5b489d2f9ac325d194a9dc67c8bc size 107520
 
 interface
 
 uses
-  RDPSimd64; //please check intel oneapi license for library distribution
+  RDPSimd64;
+  //please check the bottom file about delphi 12.x version
+  //please check intel oneapi license for library distribution
 
 implementation
 
