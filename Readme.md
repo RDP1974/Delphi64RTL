@@ -10,10 +10,11 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 8 August 2024 updated to Intel IPP v2021.12, zlib v1.3.1, visual c++ v19.29.30154<br>
 30 October 2024 updated to Intel IPP v2022.0, visual c++ v19.41.34123<br>
 09 April 2025 rem fillchar and move in case of Delphi 12.x (comes with asm optimized x64 functions)<br>
+11 April 2025 updated to intel one api v2022.1, visual c++ v19.43.34810<br>
 
 This folder contains:
 
-- SeaMM.dll memory manager (md5 aa2f3a1556c968e03bc8c2d8c1991c95 size 107520)
+- SeaMM.dll memory manager (md5 df1e5b489d2f9ac325d194a9dc67c8bc size 107520)
 - SeaRTL.dll simd enabled rtl subset routines (md5 6f35648fbf2b386e3129ec82bb12d30d size 200704)
 - SeaZIP.dll accelerated zlib compression (md5 5c4409f5c93f490119134bb5477a89fb size 982016)
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
