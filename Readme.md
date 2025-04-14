@@ -11,13 +11,15 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 30 October 2024 updated to Intel IPP v2022.0, visual c++ v19.41.34123<br>
 09 April 2025 rem fillchar and move in case of Delphi 12.x (comes with asm optimized x64 functions)<br>
 11 April 2025 updated to intel one api v2022.1, visual c++ v19.43.34810<br>
--> check SeaMM_static.dll to avoid dependancies to visual c++ crt dll<br>
+-> check SeaMM_static.dll to avoid dependancies to visual c++ crt dll (if you use only the mm)<br>
+14 April 2025 added concurrent queue thread safe from Intel IPP v2022.1, visual c++ v19.43.34810<br>
 
 This folder contains:
 
 - SeaMM.dll memory manager (md5 df1e5b489d2f9ac325d194a9dc67c8bc size 107520)
 - SeaRTL.dll simd enabled rtl subset routines (md5 6f35648fbf2b386e3129ec82bb12d30d size 200704)
 - SeaZIP.dll accelerated zlib compression (md5 5c4409f5c93f490119134bb5477a89fb size 982016)
+- SeaQPar.dll thread safe concurrent queue (md5 10eb346b9a887eb7b7d11176645a12aa)
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
 - RDPSimd64.pas wrapper for simd rtl api
 - RDPZlib64.pas wrapper for zlib deflate (level -2 AC mode in deflate call should be used over UTF-8 strings for web optimization)<br>
