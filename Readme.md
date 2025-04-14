@@ -12,7 +12,7 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 09 April 2025 rem fillchar and move in case of Delphi 12.x (comes with asm optimized x64 functions)<br>
 11 April 2025 updated to intel one api v2022.1, visual c++ v19.43.34810<br>
 -> check SeaMM_static.dll to avoid dependancies to visual c++ crt dll (if you use only the mm)<br>
-14 April 2025 added concurrent queue thread safe from Intel IPP v2022.1, visual c++ v19.43.34810<br>
+14 April 2025 added thread safe concurrent queue from Intel IPP v2022.1, visual c++ v19.43.34810<br>
 
 This folder contains:
 
