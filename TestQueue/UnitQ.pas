@@ -1,6 +1,6 @@
 unit UnitQ;
 // Roberto Della Pasqua www.dellapasqua.com
-// 14 apr 2024 thread safe concurrent queue from Intel One Api v2022.1
+// 14 apr 2025 thread safe concurrent queue from Intel One Api v2022.1
 // little test with strings
 
 interface
