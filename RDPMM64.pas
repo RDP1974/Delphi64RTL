@@ -29,8 +29,8 @@ end;
 
 function QSEAFreeMem(P: Pointer): Integer; inline;
 begin
-  Result := 0;
   SeaFreemem(P);
+  Result := 0;
 end;
 
 function QSEAReallocMem(P: Pointer; Size: Nativeint): Pointer; inline;
@@ -41,7 +41,12 @@ end;
 function QSEAAllocMem(Size: Nativeint): Pointer; inline;
 begin
   Result := SeaMalloc(Size);
-  if (Result <> nil) then SeaZero(Result, Size);
+  if (Result <> nil) then
+  {$IF CompilerVersion < 36.0}
+   SeaZero(Result, Size);
+  {$ELSE}
+   Fillchar(Result^, Size, #0);
+  {$IFEND}
 end;
 
 function QRegisterExpectedMemoryLeak(P: Pointer): Boolean; inline;
