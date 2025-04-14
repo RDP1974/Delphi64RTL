@@ -11,6 +11,7 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 30 October 2024 updated to Intel IPP v2022.0, visual c++ v19.41.34123<br>
 09 April 2025 rem fillchar and move in case of Delphi 12.x (comes with asm optimized x64 functions)<br>
 11 April 2025 updated to intel one api v2022.1, visual c++ v19.43.34810<br>
+-> check SeaMM_static.dll to avoid dependancies to visual c++ crt dll<br>
 
 This folder contains:
 
