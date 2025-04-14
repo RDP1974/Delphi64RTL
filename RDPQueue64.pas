@@ -17,6 +17,5 @@ procedure FreeQueue(queue: pointer); stdcall; external QPARDLL name 'FreeQueue';
 
 implementation
 
-
 end.
 
