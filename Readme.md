@@ -22,6 +22,7 @@ This folder contains:
 - SeaQPar.dll thread safe concurrent queue (md5 10eb346b9a887eb7b7d11176645a12aa)
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
 - RDPSimd64.pas wrapper for simd rtl api
+- RDPQueue64.pas wrapper for thread safe concurrent queue
 - RDPZlib64.pas wrapper for zlib deflate (level -2 AC mode in deflate call should be used over UTF-8 strings for web optimization)<br>
 - RDPWebBroker64.pas utils to enhance webbroker web apps<br> 
 - SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)
