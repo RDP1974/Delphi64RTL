@@ -39,7 +39,7 @@ begin
   for A := 0 to 1000000 do
   begin
    New(S);
-   S^ := 'CIAO THREAD '+ A.ToString;
+   S^ := 'BOB THREAD '+ A.ToString;
    PushToQueue(Queue, S);
   end;
   for A := 0 to 1000000 do
