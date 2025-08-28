@@ -5,18 +5,26 @@ unit RDPMM64;
 // 30 oct 2024 updated to intel one api v2022.0, visual c++ v19.41.34123
 // 11 apr 2025 updated to intel one api v2022.1, visual c++ v19.43.34810
 // seamm.dll md5 df1e5b489d2f9ac325d194a9dc67c8bc size 107520
+// 28 ago 2025 linux update, apt install libtbb-dev
 
 interface
 
-uses
+{$IFDEF MSWINDOWS}
+ uses
   RDPSimd64;
-  //please check the bottom file about delphi 12.x version
-  //please check intel oneapi license for library distribution
+{$ENDIF}
+ //please check the bottom file about delphi 12.x version
+ //please check intel oneapi license for library distribution
 
 implementation
 
 const
+ {$IFDEF MSWINDOWS}
   TBBMalloc = 'SeaMM.DLL';
+ {$ENDIF}
+ {$IFDEF LINUX}
+  TBBMalloc = 'libtbbmalloc.so';
+ {$ENDIF}
 
 function SeaMalloc(Size: NativeUint): Pointer; cdecl; external TBBMalloc name 'scalable_malloc';
 procedure SeaFreemem(P: Pointer); cdecl; external TBBMalloc name 'scalable_free';
