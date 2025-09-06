@@ -50,11 +50,11 @@ function QSEAAllocMem(Size: Nativeint): Pointer; inline;
 begin
   Result := SeaMalloc(Size);
   if (Result <> nil) then
-  {$IF CompilerVersion < 36.0}
+  {.$IF CompilerVersion < 36.0}
    SeaZero(Result, Size);
-  {$ELSE}
-   Fillchar(Result^, Size, #0);
-  {$IFEND}
+  {.$ELSE}
+  // Fillchar(Result^, Size, #0); // rem this if linux
+  {.$IFEND}
 end;
 
 function QRegisterExpectedMemoryLeak(P: Pointer): Boolean; inline;
@@ -88,4 +88,5 @@ finalization
   SetMemoryManager(OldMemoryManager);
 
 end.
+
 
