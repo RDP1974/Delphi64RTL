@@ -51,9 +51,9 @@ begin
   Result := SeaMalloc(Size);
   if (Result <> nil) then
   {.$IF CompilerVersion < 36.0}
-   SeaZero(Result, Size);
+   SeaZero(Result, Size); // rem this if linux
   {.$ELSE}
-  // Fillchar(Result^, Size, #0); // rem this if linux
+  // Fillchar(Result^, Size, #0); // unrem this if linux
   {.$IFEND}
 end;
 
@@ -88,5 +88,6 @@ finalization
   SetMemoryManager(OldMemoryManager);
 
 end.
+
 
 
