@@ -185,10 +185,10 @@ end;
 
 procedure PatchRTL64;
 begin
-{$IF CompilerVersion < 36.0}
+{.$IF CompilerVersion < 36.0}
   RedirectCode(@System.Move, @Move2);
   RedirectCode(OrigFillchar, @Fillchar2);
-{$IFEND}
+{.$IFEND}
   RedirectCode(RetrievePosRawAddr, @PosRaw);
   RedirectCode(RetrievePosWideAddr, @PosWide);
   RedirectCode(RetrievePosUnicodeAddr, @PosUnicode);
@@ -198,3 +198,4 @@ initialization
   PatchRTL64;
 
 end.
+
