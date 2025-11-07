@@ -4,7 +4,7 @@ unit RDPSimd64;
 // rtl api patches with Intel IPP performance libraries
 // 8 ago 2024 updated to intel ipp v2021.12, visual c++ v19.29.30154
 // seartl.dll md5 6f35648fbf2b386e3129ec82bb12d30d size 200704
-// 9 apr 2025 rem fillchar and move in case of Delphi 12.x (comes with asm optimized x64 functions)
+// 7 nov 2025 rem move in case of Delphi 12+ (asm optimized move)
 
 interface
 
@@ -185,10 +185,10 @@ end;
 
 procedure PatchRTL64;
 begin
-{.$IF CompilerVersion < 36.0}
-  RedirectCode(@System.Move, @Move2);
+{$IF CompilerVersion < 36.0}
+  RedirectCode(@System.Move, @Move2); //Delphi 13 has optimized move asm
+{$IFEND}
   RedirectCode(OrigFillchar, @Fillchar2);
-{.$IFEND}
   RedirectCode(RetrievePosRawAddr, @PosRaw);
   RedirectCode(RetrievePosWideAddr, @PosWide);
   RedirectCode(RetrievePosUnicodeAddr, @PosUnicode);

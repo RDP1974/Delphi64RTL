@@ -4,14 +4,15 @@ unit RDPMM64;
 // memory manager replacement with Intel ipp libraries
 // 30 oct 2024 updated to intel one api v2022.0, visual c++ v19.41.34123
 // 11 apr 2025 updated to intel one api v2022.1, visual c++ v19.43.34810
-// seamm.dll md5 df1e5b489d2f9ac325d194a9dc67c8bc size 107520
 // 28 ago 2025 linux update, apt install libtbb-dev (performance gain is negligible)
+// 7 nov 2025 tbbmalloc oneapi 2023.0
+// seamm.dll md5 bba140b8a85115cee08eee116d9241d2
 
 interface
 
 {$IFDEF MSWINDOWS}
- uses
-  RDPSimd64;
+uses
+ RDPSimd64;
 {$ENDIF}
  //please check the bottom file about delphi 12.x version
  //please check intel oneapi license for library distribution
@@ -49,12 +50,8 @@ end;
 function QSEAAllocMem(Size: Nativeint): Pointer; inline;
 begin
   Result := SeaMalloc(Size);
-  if (Result <> nil) then
-  {.$IF CompilerVersion < 36.0}
-   SeaZero(Result, Size); // rem this if linux
-  {.$ELSE}
-  // Fillchar(Result^, Size, #0); // unrem this if linux
-  {.$IFEND}
+  if (Result <> nil) then SeaZero(Result, Size);
+  //Fillchar(Result^, Size, #0); // use this if linux
 end;
 
 function QRegisterExpectedMemoryLeak(P: Pointer): Boolean; inline;
