@@ -14,8 +14,7 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 -> check SeaMM_static.dll to avoid dependancies to visual c++ crt dll (if you use only the mm)<br>
 14 April 2025 added thread safe concurrent queue from Intel IPP v2022.1, visual c++ v19.43.34810<br>
 28 August 2025 little patch Linux tbbmalloc<br>
-07 November 2025 updated to Intel oneapi v2023.0<br>
-07 November 2025 changes to accomodate Delphi 12+ optimized move()<br>
+07 November 2025 updated to Intel oneapi v2023.0, small changes to accomodate Delphi 12+ optimized move()<br>
 
 This folder contains:
 
@@ -56,6 +55,7 @@ Contact me: roberto dot dellapasqua at live.com
 Thank you and best regards
 
 Roberto Della Pasqua
+
 
 
 
