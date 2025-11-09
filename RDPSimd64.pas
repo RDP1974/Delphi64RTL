@@ -186,7 +186,7 @@ end;
 procedure PatchRTL64;
 begin
 {$IF CompilerVersion < 36.0}
-  RedirectCode(@System.Move, @Move2); //Delphi 13 has optimized move asm
+  RedirectCode(@System.Move, @Move2); //Delphi 12+ has optimized move asm
 {$IFEND}
   RedirectCode(OrigFillchar, @Fillchar2);
   RedirectCode(RetrievePosRawAddr, @PosRaw);
@@ -198,4 +198,5 @@ initialization
   PatchRTL64;
 
 end.
+
 
