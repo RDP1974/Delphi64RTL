@@ -6,7 +6,7 @@ uses
   System.Win.ComObj,
   Web.WebBroker,
   Web.Win.ISAPIApp,
-//  Web.Win.ISAPIThreadPool, comment this line, is useless with actual IIS
+  Web.Win.ISAPIThreadPool,
   WebModuleUnit in 'WebModuleUnit.pas' {WebModuleZlib: TWebModule};
 
 {$R *.res}
