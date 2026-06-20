@@ -15,10 +15,11 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 14 April 2025 added thread safe concurrent queue from Intel IPP v2022.1, visual c++ v19.43.34810<br>
 28 August 2025 little patch Linux tbbmalloc<br>
 07 November 2025 updated to Intel oneapi v2023.0, small changes to accomodate Delphi 12+ optimized move()<br>
+20 June 2026 updated SeaMM.dll with Intel oneapi v2023.1<br>
 
 This folder contains:
 
-- SeaMM.dll memory manager (md5 bba140b8a85115cee08eee116d9241d2 size 107520)
+- SeaMM.dll memory manager (md5 262c4780e41fed814a9d96735dc053fa size 107520)
 - SeaRTL.dll simd enabled rtl subset routines (md5 6f35648fbf2b386e3129ec82bb12d30d size 200704)
 - SeaZIP.dll accelerated zlib compression (md5 5c4409f5c93f490119134bb5477a89fb size 982016)
 - SeaQPar.dll thread safe concurrent queue (md5 10eb346b9a887eb7b7d11176645a12aa)
