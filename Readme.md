@@ -15,7 +15,7 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 14 April 2025 added thread safe concurrent queue from Intel IPP v2022.1, visual c++ v19.43.34810<br>
 28 August 2025 little patch Linux tbbmalloc<br>
 07 November 2025 updated to Intel oneapi v2023.0, small changes to accomodate Delphi 12+ optimized move()<br>
-20 June 2026 updated SeaMM.dll with Intel oneapi v2023.1<br>
+20 June 2026 updated SeaMM.dll with Intel oneapi v2023.1 (visual c++ v19.44.35228)<br>
 
 This folder contains:
 
