@@ -2,7 +2,6 @@ program TestQ;
 
 uses
   RDPMM64,
-  RDPQueue64,
   Vcl.Forms,
   UnitQ in 'UnitQ.pas' {FormQ};
 
