@@ -6,7 +6,8 @@ unit RDPMM64;
 // 11 apr 2025 updated to intel one api v2022.1, visual c++ v19.43.34810
 // 28 ago 2025 linux update, apt install libtbb-dev (performance gain is negligible)
 // 7 nov 2025 tbbmalloc oneapi 2023.0
-// seamm.dll md5 bba140b8a85115cee08eee116d9241d2
+// 20 jun 2026 update oneapi 2023.1
+// seamm.dll md5 262c4780e41fed814a9d96735dc053fa
 
 interface
 
