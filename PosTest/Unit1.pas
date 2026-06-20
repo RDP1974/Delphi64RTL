@@ -25,18 +25,18 @@ implementation
 {$R *.dfm}
 
 var
-  SA: string = 'abcdefghilmnopqrstuvz';
-  SB: string = 'abcd';
+  SA: string = 'abcdÚ‡Ëefghilmnopqrstuvz';
+  SB: string = 'abcdÚ‡Ë';
   SC: string = 'ghi';
   SD: string = 'uvz';
 
-  WA: widestring = 'abcdefghilmnopqrstuvz';
-  WB: widestring = 'abcd';
+  WA: widestring = 'abcdÚ‡Ëefghilmnopqrstuvz';
+  WB: widestring = 'abcdÚ‡Ë';
   WC: widestring = 'ghi';
   WD: widestring = 'uvz';
 
-  RA: rawbytestring = 'abcdefghilmnopqrstuvz';
-  RB: rawbytestring = 'abcd';
+  RA: rawbytestring = 'abcdÚ‡Ëefghilmnopqrstuvz';
+  RB: rawbytestring = 'abcdÚ‡Ë';
   RC: rawbytestring = 'ghi';
   RD: rawbytestring = 'uvz';
 
