@@ -32,7 +32,7 @@ This folder contains:
 - SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)
 - License.txt for legal terms
 <br>
-<p align="center"><img src="dext.png" width="50%"></p>
+<p align="center"><img src="dext_sys.png" width="60%"></p>
 A modern Delphi web framework tested with internal <a href="https://github.com/cesarliws/dext/blob/main/Benchmarks/HISTORICAL_RESULTS.md" target="blank">benchmark</a> (vm windows 2022 intel 9900k)<br>
 <br>
 <br>
