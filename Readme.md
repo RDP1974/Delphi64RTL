@@ -33,7 +33,7 @@ This folder contains:
 - License.txt for legal terms
 <br>
 <p align="center"><img src="dext_sys.png" width="60%"></p>
-A modern Delphi web framework tested with internal <a href="https://github.com/cesarliws/dext/blob/main/Benchmarks/HISTORICAL_RESULTS.md" target="blank">benchmark</a> (vm windows 2025 intel 9900kf 8/16)<br>
+A modern Delphi web framework tested with internal <a href="https://github.com/cesarliws/dext/blob/main/Benchmarks/HISTORICAL_RESULTS.md" target="_blank">benchmark</a> (vm windows 2025 intel 9900kf 8/16)<br>
 <br>
 About zlib IPP accelerated: you can use symbolic name Z_IPP_FAST_COMPRESSION which is equal to -2<br>    
 Introduced new sub-ranges of compression levels from 11 to 29<br>
