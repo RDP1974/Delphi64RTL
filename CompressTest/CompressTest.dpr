@@ -1,5 +1,5 @@
 program CompressTest;
-
+// 29 jun 2026 check with latest zlib
 uses
   RDPMM64,
   Vcl.Forms,
