@@ -29,7 +29,7 @@ This folder contains:
 - RDPQueue64.pas wrapper for thread safe concurrent queue
 - RDPZlib64.pas wrapper for zlib deflate (level -2 AC mode in deflate call should be used over UTF-8 strings for web optimization)<br>
 - RDPWebBroker64.pas utils to enhance webbroker web apps<br> 
-- SeaIISFilter ultra-fast realtime deflate filter for IIS web server (5x faster than default gzip)
+- SeaIISFilter ultra-fast realtime deflate filter for IIS web server
 - License.txt for legal terms
 <br>
 <p align="center"><img src="dext_sys.png" width="60%"></p>
