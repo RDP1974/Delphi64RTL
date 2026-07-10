@@ -8,10 +8,11 @@ unit RDPMM64;
 // 7 nov 2025 tbbmalloc oneapi 2023.0
 // 20 jun 2026 update oneapi 2023.1
 // seamm.dll md5 262c4780e41fed814a9d96735dc053fa
+// 10 july 2026 added support for 32bit windows
 
 interface
 
-{$IFDEF MSWINDOWS}
+{$IFDEF WIN64}
 uses
  RDPSimd64;
 {$ENDIF}
@@ -21,8 +22,11 @@ uses
 implementation
 
 const
- {$IFDEF MSWINDOWS}
+ {$IFDEF WIN64}
   TBBMalloc = 'SeaMM.DLL';
+ {$ENDIF}
+ {$IFDEF WIN32}
+  TBBMalloc = 'SeaMM32.DLL';
  {$ENDIF}
  {$IFDEF LINUX}
   TBBMalloc = 'libtbbmalloc.so';
@@ -51,8 +55,12 @@ end;
 function QSEAAllocMem(Size: Nativeint): Pointer; inline;
 begin
   Result := SeaMalloc(Size);
+ {$IFDEF WIN64}
   if (Result <> nil) then SeaZero(Result, Size);
-  //Fillchar(Result^, Size, #0); // use this if linux
+ {$ENDIF}
+ {$IFDEF WIN32}
+  if (Result <> nil) then Fillchar(Result^, Size, 0);
+ {$ENDIF}
 end;
 
 function QRegisterExpectedMemoryLeak(P: Pointer): Boolean; inline;
