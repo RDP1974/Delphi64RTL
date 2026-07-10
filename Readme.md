@@ -16,6 +16,7 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 28 August 2025 little patch Linux tbbmalloc<br>
 07 November 2025 updated to Intel oneapi v2023.0, small changes to accomodate Delphi 12+ optimized move()<br>
 20 June 2026 updated SeaMM.dll, SeaQPar.dll with Intel oneapi v2023.1 (visual c++ v19.44.35228)<br>
+10 July 2026 added support for Windows 32bit (tbbmalloc)<br>
 (please update to latest visual c++ redistributable if not using static libs)<br>
 
 This folder contains:
