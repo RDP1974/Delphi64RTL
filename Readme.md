@@ -21,10 +21,10 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 
 This folder contains:
 
-- SeaMM.dll memory manager (md5 262c4780e41fed814a9d96735dc053fa size 107520)
-- SeaMM32.dll memory manager win32 (md5 92ea21c9f2840a94341ac74ff74534f2 size 81920)
-- SeaRTL.dll simd enabled rtl subset routines (md5 6f35648fbf2b386e3129ec82bb12d30d size 200704)
-- SeaZIP.dll accelerated zlib compression (md5 5c4409f5c93f490119134bb5477a89fb size 982016)
+- SeaMM.dll memory manager (md5 262c4780e41fed814a9d96735dc053fa)
+- SeaMM32.dll memory manager win32 (md5 92ea21c9f2840a94341ac74ff74534f2)
+- SeaRTL.dll simd enabled rtl subset routines (md5 6f35648fbf2b386e3129ec82bb12d30d)
+- SeaZIP.dll accelerated zlib compression (md5 5c4409f5c93f490119134bb5477a89fb)
 - SeaQPar.dll thread safe concurrent queue (md5 561129654b5a603e6c0d5866b20a7431)
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
 - RDPSimd64.pas wrapper for simd rtl api
