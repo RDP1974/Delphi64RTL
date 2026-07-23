@@ -27,6 +27,7 @@ This folder contains:
 - SeaRTL.dll simd enabled rtl subset routines (md5 6f35648fbf2b386e3129ec82bb12d30d)
 - SeaZIP.dll accelerated zlib compression (md5 5c4409f5c93f490119134bb5477a89fb)
 - SeaQPar.dll thread safe concurrent queue (md5 561129654b5a603e6c0d5866b20a7431)
+- libseaqpar.so thread safe concurrent queue (md5 62c4972dedd181c233c33a1ad66275e5)
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
 - RDPSimd64.pas wrapper for simd rtl api
 - RDPQueue64.pas wrapper for thread safe concurrent queue
