@@ -72,9 +72,10 @@ begin
   signal(SIGTERM, @SignalHandler);  // kill / systemd stop
   signal(SIGQUIT, @SignalHandler);
 
-  try
+ 
    W_Queue := CreateQueue;
    for var i := Low(W1) to High(W1) do W1[i] := TWorkerThread.Create;
+   try
     try
       while not T_Finish do
       begin
