@@ -18,8 +18,8 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 20 June 2026 updated SeaMM.dll, SeaQPar.dll with Intel oneapi v2023.1 (visual c++ v19.44.35228)<br>
 10 July 2026 added support for Windows 32bit (tbbmalloc)<br>
 (please update to latest visual c++ redistributable if not using static libs)<br>
-23 July 2026 Linux tbb parallel queue (check the sample folder)<br>
-24 July 2026 Linux tbbmalloc static build (no dependencies, no stripping, clean, dext qc test passed)
+23 July 2026 Linux tbb parallel queue static lib (check the sample folder)<br>
+24 July 2026 Linux tbbmalloc static lib (no dependencies, no stripping, clean, dext qc test passed)
 
 This folder contains:
 
