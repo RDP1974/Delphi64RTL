@@ -2,7 +2,7 @@ unit RDPQueue64;
 // Roberto Della Pasqua www.dellapasqua.com
 // 14 apr 2025 thread safe concurrent queue from Intel One Api v2022.1
 // 20 jun 2026 update intel oneapi 2023.1
-// 23 july 2026 linux static library tbb and libstd++ (latest gcc and tbb at the time)
+// 23 july 2026 linux static library tbb, libgcc and libstd++ (latest gcc and tbb at the time)
 
 interface
 
