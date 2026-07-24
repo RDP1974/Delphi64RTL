@@ -13,7 +13,7 @@ unit RDPMM64;
 
 interface
 
-{$IFDEF MSWINDOWS}
+{$IFDEF WIN64}
 uses
  RDPSimd64;
 {$ENDIF}
@@ -23,8 +23,11 @@ uses
 implementation
 
 const
- {$IFDEF MSWINDOWS}
+ {$IFDEF WIN64}
   TBBMalloc = 'SeaMM.DLL';
+ {$ENDIF}
+ {$IFDEF WIN32}
+  TBBMalloc = 'SeaMM32.DLL';
  {$ENDIF}
  {$IFDEF LINUX}
   TBBMalloc = 'libseamm.so';
@@ -53,8 +56,11 @@ end;
 function QSEAAllocMem(Size: Nativeint): Pointer; inline;
 begin
   Result := SeaMalloc(Size);
- {$IFDEF MSWINDOWS}
+ {$IFDEF WIN64}
   if (Result <> nil) then SeaZero(Result, Size);
+ {$ENDIF}
+ {$IFDEF WIN32}
+  if (Result <> nil) then Fillchar(Result^, Size, 0);
  {$ENDIF}
  {$IFDEF LINUX}
   if (Result <> nil) then Fillchar(Result^, Size, 0);
