@@ -7,12 +7,13 @@ unit RDPMM64;
 // 28 ago 2025 linux update, apt install libtbb-dev (performance gain is negligible)
 // 7 nov 2025 tbbmalloc oneapi 2023.0
 // 20 jun 2026 update oneapi 2023.1
+// 24 july 2026 linux static library (no dependencies, no stripping, clean, dext qc test passed)
 // seamm.dll md5 262c4780e41fed814a9d96735dc053fa
-// 10 july 2026 added support for 32bit windows
+// libseamm.so md5 56265e9523efd78947ea5c21bf55c3a7
 
 interface
 
-{$IFDEF WIN64}
+{$IFDEF MSWINDOWS}
 uses
  RDPSimd64;
 {$ENDIF}
@@ -22,14 +23,11 @@ uses
 implementation
 
 const
- {$IFDEF WIN64}
+ {$IFDEF MSWINDOWS}
   TBBMalloc = 'SeaMM.DLL';
  {$ENDIF}
- {$IFDEF WIN32}
-  TBBMalloc = 'SeaMM32.DLL';
- {$ENDIF}
  {$IFDEF LINUX}
-  TBBMalloc = 'libtbbmalloc.so';
+  TBBMalloc = 'libseamm.so';
  {$ENDIF}
 
 function SeaMalloc(Size: NativeUint): Pointer; cdecl; external TBBMalloc name 'scalable_malloc';
@@ -55,10 +53,10 @@ end;
 function QSEAAllocMem(Size: Nativeint): Pointer; inline;
 begin
   Result := SeaMalloc(Size);
- {$IFDEF WIN64}
+ {$IFDEF MSWINDOWS}
   if (Result <> nil) then SeaZero(Result, Size);
  {$ENDIF}
- {$IFDEF WIN32}
+ {$IFDEF LINUX}
   if (Result <> nil) then Fillchar(Result^, Size, 0);
  {$ENDIF}
 end;
