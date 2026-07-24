@@ -18,7 +18,8 @@ Object Pascal wrappers from Intel Integrated Performance Primitives and Intel Th
 20 June 2026 updated SeaMM.dll, SeaQPar.dll with Intel oneapi v2023.1 (visual c++ v19.44.35228)<br>
 10 July 2026 added support for Windows 32bit (tbbmalloc)<br>
 (please update to latest visual c++ redistributable if not using static libs)<br>
-23 July 2026 added Linux tbb parallel queue (check the sample folder)<br>
+23 July 2026 Linux tbb parallel queue (check the sample folder)<br>
+24 July 2026 Linux tbbmalloc static build (no dependencies, no stripping, clean, dext qc test passed)
 
 This folder contains:
 
@@ -28,6 +29,7 @@ This folder contains:
 - SeaZIP.dll accelerated zlib compression (md5 5c4409f5c93f490119134bb5477a89fb)
 - SeaQPar.dll thread safe concurrent queue (md5 561129654b5a603e6c0d5866b20a7431)
 - libseaqpar.so thread safe concurrent queue (md5 2e18eadb2c717039f37e86065cf59e11)
+- libseamm.so linux memory manager (md5 56265e9523efd78947ea5c21bf55c3a7)
 - RDPMM64.pas wrapper for memory manager (put this unit as first unit clause in project source)
 - RDPSimd64.pas wrapper for simd rtl api
 - RDPQueue64.pas wrapper for thread safe concurrent queue
